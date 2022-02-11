@@ -1,3 +1,6 @@
+::-webkit-scrollbar {
+  display: none;
+}
 *{
   padding: 0;
   margin: 0;
@@ -8,11 +11,19 @@ html, body {
   user-select: none;
   -webkit-app-region: drag;
 }
+#container{
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 30px auto;
+  grid-template-rows: 30px auto;
+  grid-template-areas: 
+    "none top"
+    "left infos";
+}
 #ruler{
   width: 100vw;
   height: 30px;
   background-color: red;
-}
-#ruler:hover{
-  background-color: blue;
+  grid-area: "top";
 }
