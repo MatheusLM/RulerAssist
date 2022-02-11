@@ -9,5 +9,8 @@
   },
   "scripts": {
     "start": "electron ."
+  },
+  "dependencies": {
+    "ipc": "^0.0.1"
   }
 }
