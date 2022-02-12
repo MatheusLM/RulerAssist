@@ -1,15 +1,28 @@
 const { ipcRenderer } = require("electron");
 
-let theme;
-let data;
-let controls;
+let theme = {};
+let data = {};
+let controls = {};
+let rulerData = {};
 
-const ruler = document.getElementById("ruler");
-const container = document.getElementById("container");
-const markers = document.getElementById("markers");
-const controlsPanel = document.getElementById("controls");
 const html = document.getElementById("html");
 const body = document.getElementById("body");
+
+const ruler = document.getElementById("ruler");
+const markers = document.getElementById("markers");
+const controlsPanel = document.getElementById("controls");
+
+const rulerSize = document.getElementById("rulerSize");
+const rulerEquivalent = document.getElementById("rulerEquivalent");
+
+ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData) => {
+  theme = newTheme;
+  data = newData;
+  controls = newControls;
+  rulerData = newRulerData;
+  rulerSize.value = newRulerData.size
+  rulerEquivalent.value = newRulerData.equivalent;
+});
 
 ipcRenderer.on("sendTheme", (event, newData) => {
   theme = newData;
@@ -55,5 +68,12 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
 
   // CONTROLS PANEL
   controlsPanel.style.visibility = (controls.showControls) ? 'visible' : 'hidden';
-
+  
 });
+
+rulerSize.addEventListener('input', (e) => {
+  rulerData.size = rulerSize.value
+})
+rulerEquivalent.addEventListener('input', (e) => {
+  rulerData.equivalent = rulerEquivalent.value
+})

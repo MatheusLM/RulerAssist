@@ -14,6 +14,11 @@ let theme = {
   opacity: 0.9
 }
 
+let rulerData = {
+  size: data.width,
+  equivalent: data.width
+}
+
 let controls = {
   fast: false,
   modifier: 1,
@@ -33,6 +38,12 @@ function updateData() {
     height: size[1],
     x: pos[0],
     y: pos[1]
+  }
+}
+function updateRulerData() {
+  rulerData = {
+    size: data.width,
+    equivalent: data.width
   }
 }
 function updateWindow() {
@@ -69,6 +80,9 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
+  updateData()
+  updateRulerData()
+  mainWindow.webContents.send("sync", theme, data, controls, rulerData);
   mainWindow.webContents.send("sendControls", controls, data);
 
   mainWindow.on('resize', () => {
