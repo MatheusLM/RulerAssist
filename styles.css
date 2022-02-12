@@ -4,13 +4,12 @@
 *{
   padding: 0;
   margin: 0;
-  user-select: none;
-  -webkit-app-region: drag;
   background-color: transparent;
+  font-size: 14px;
 }
 #html{
   transform-origin: 50% 50%;
-  transition-duration: 0.3s;
+  transition-duration: 0.2s;
 }
 body{
   width: 100vw;
@@ -27,6 +26,8 @@ body{
   background-size: 10px 56px;
   background-repeat: repeat-x;
   background-color: rgba(255,255,255,0.8);
+  user-select: none;
+  -webkit-app-region: drag;
 }
 
 #markers{
@@ -37,25 +38,66 @@ body{
   justify-content: space-between;
   margin-left: -1px;
 }
-/* .marker:last-of-type span, .marker:first-of-type span{
-  opacity: 0;
-} */
+.marker:first-of-type{ transform: translateX(1px); }
+.marker:first-of-type span{ margin-left: 10px; }
+.marker:last-of-type span{margin-left: -10px; }
 .marker{
   width: 1px;
   height: 100vh;
-  background-color: red;
+  background-color: #0e0e0e;
   display: flex;
   align-items: flex-start;
   justify-content: center;
 }
 .marker span{
-  padding: 0 4px;
-  font-size: 14px;
+  padding: 0 4px 1px 4px;
   font-weight: bold;
   font-family: 'calibri';
   color: white;
   border-radius: 4px;
-  background: red;
-  transform: rotate(90deg);
-  margin-top: 16px;
+  background: #0e0e0e;
+  transform: rotate(-90deg);
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+#controls{
+  position: absolute;
+  visibility: hidden;
+  width: 100vw;
+  height: 40px;
+  margin-top: 56px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.buttonContainer{
+  width: fit-content;
+  height: 100%;
+  background-color: rgba(255,255,255,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 8px;
+}
+.buttonContainer label{
+  font-size: 12px;
+  font-family: 'calibri';
+  display: block;
+  height: auto;
+  color: #0e0e0e;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.buttonContainer input{
+  font-size: 12px;
+  font-family: 'calibri';
+  width: max-content;
+  max-width: 100px;
+  border: none;
+  padding: 2px 0 2px 8px;
+  background-color: white;
 }

@@ -10,23 +10,21 @@ let data = {
 
 let theme = {
   dark: true,
-  flipped: false,
+  rotated: false,
   opacity: 0.9
 }
 
 let controls = {
   fast: false,
   modifier: 1,
-  symmetrical: false,
+  symmetrical: true,
   markers: 3,
-  showSizes: false,
-  kiosk: false
+  showSizes: true,
+  clickable: true,
+  kiosk: false,
+  showControls: true,
 }
 
-function updateWindow() {
-  mainWindow.setSize(data.width, data.height);
-  mainWindow.setPosition(data.x, data.y);
-}
 function updateData() {
   let pos = mainWindow.getPosition()
   let size = mainWindow.getSize()
@@ -37,8 +35,15 @@ function updateData() {
     y: pos[1]
   }
 }
+function updateWindow() {
+  mainWindow.setSize(data.width, data.height);
+  mainWindow.setPosition(data.x, data.y);
+}
 function updateOpacity(){
   mainWindow.setOpacity(theme.opacity)
+}
+function updateClickable(newData){
+  mainWindow.setIgnoreMouseEvents(newData)
 }
 
 const createWindow = () => {
@@ -54,7 +59,7 @@ const createWindow = () => {
     maxHeight: 1080,
     alwaysOnTop: true,
     frame: false,
-    transparent: true
+    transparent: true,
   });
 
   /* mainWindow.webContents.openDevTools(true); */
@@ -64,19 +69,33 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
+  mainWindow.webContents.send("sendControls", controls, data);
 
   mainWindow.on('resize', () => {
     updateData()
     mainWindow.webContents.send("sendControls", controls, data);
   });
+  mainWindow.on("will-move", () => {
+    updateData()
+    updateWindow()
+  })
+  mainWindow.on("focus", () => {
+    controls.showControls = true;
+    updateData()
+    data.height += (data.height <= 56) ? 40 : 0;
+    updateWindow()
+    mainWindow.webContents.send("sendControls", controls, data);
+  })
+  mainWindow.on("blur", () => {
+    controls.showControls = false;
+    data.height -= (data.height > 96) ? 0 : 40;
+    updateWindow()
+    mainWindow.webContents.send("sendControls", controls, data);
+  })
 
   updateData()
   setupKeys(globalShortcut);
 });
-
-app.on("moved", (e) => {
-  console.log(e);
-})
 
 function sendControls(controls, data){
   mainWindow.webContents.send("sendControls", controls, data);
@@ -112,9 +131,9 @@ function setupKeys(globalShortcut){
     mainWindow.webContents.send("sendTheme", theme);
     updateWindow()
   });
-  globalShortcut.register("Alt+F", () => {
+  globalShortcut.register("Alt+R", () => {
     updateData()
-    theme.flipped = !theme.flipped;
+    theme.rotated = !theme.rotated;
     /* let size = mainWindow.getSize()
     data.width = size[1];
     data.height = size[0]; */
@@ -122,12 +141,12 @@ function setupKeys(globalShortcut){
     updateWindow()
   });
   globalShortcut.register("Alt+PageUp", () => {
-    theme.flipped = !theme.flipped;
+    theme.rotated = !theme.rotated;
     theme.opacity += (theme.opacity < 1) ? 0.05 : 0;
     updateOpacity()
   });
   globalShortcut.register("Alt+PageDown", () => {
-    theme.flipped = !theme.flipped;
+    theme.rotated = !theme.rotated;
     theme.opacity -= (theme.opacity > 0.1) ? 0.05 : 0;
     updateOpacity()
   });
@@ -167,16 +186,17 @@ function setupKeys(globalShortcut){
     updateWindow()
   });
   // Kiosk controls
-  globalShortcut.register("Alt+K", () => {
+  globalShortcut.register("Alt+F", () => {
     updateData()
     controls.kiosk = !controls.kiosk
     mainWindow.kiosk = controls.kiosk
-    if(controls.kiosk){
-      mainWindow.setIgnoreMouseEvents(true)
-    }else{
-      mainWindow.setIgnoreMouseEvents(false)
-    }
+    updateClickable(controls.kiosk)
     sendControls(controls, data)
+  });
+  globalShortcut.register("Alt+num0", () => {
+    updateData()
+    controls.clickable = !controls.clickable
+    updateClickable(controls.clickable)
   });
   // 
   globalShortcut.register("Shift+numadd", () => {
@@ -186,7 +206,7 @@ function setupKeys(globalShortcut){
     
   });
   // Symmetrical ruler
-  globalShortcut.register("Alt+num0", () => {
+  globalShortcut.register("Alt+S", () => {
     updateData()
     controls.symmetrical = !controls.symmetrical
     sendControls(controls, data)
