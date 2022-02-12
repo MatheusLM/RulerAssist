@@ -9,6 +9,6 @@
   },
   "scripts": {
     "start": "electron .",
-    "dev": "nodemon --watch main.js --exec electron ."
+    "dev": "nodemon --watch * --exec electron ."
   }
 }

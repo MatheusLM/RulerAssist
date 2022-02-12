@@ -19,11 +19,12 @@ body{
 }
 
 #ruler{
-  height: 60px;
+  height: 56px;
   display: flex;
   flex-grow: 1;
-  flex-shrink: 0;
+  flex-shrink: 1;
   background-image: url("./assets/pattern.png");
+  background-size: 10px 56px;
   background-repeat: repeat-x;
   background-color: rgba(255,255,255,0.8);
 }
@@ -34,21 +35,27 @@ body{
   flex-shrink: 0;
   flex-direction: row;
   justify-content: space-between;
+  margin-left: -1px;
 }
+/* .marker:last-of-type span, .marker:first-of-type span{
+  opacity: 0;
+} */
 .marker{
-  width: 2px;
-  height: 100%;
+  width: 1px;
+  height: 100vh;
   background-color: red;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 .marker span{
-  padding: 2px;
-  font-size: 12px;
+  padding: 0 4px;
+  font-size: 14px;
+  font-weight: bold;
   font-family: 'calibri';
   color: white;
   border-radius: 4px;
   background: red;
-  transform: rotate(-90deg);
+  transform: rotate(90deg);
+  margin-top: 16px;
 }
