@@ -4,26 +4,51 @@
 *{
   padding: 0;
   margin: 0;
-}
-html, body {
-  width: 100vw;
-  height: 100vh;
   user-select: none;
   -webkit-app-region: drag;
+  background-color: transparent;
 }
-#container{
+#html{
+  transform-origin: 50% 50%;
+  transition-duration: 0.3s;
+}
+body{
   width: 100vw;
   height: 100vh;
-  display: grid;
-  grid-template-columns: 30px auto;
-  grid-template-rows: 30px auto;
-  grid-template-areas: 
-    "none top"
-    "left infos";
+  display: flex;
 }
+
 #ruler{
-  width: 100vw;
-  height: 30px;
+  height: 60px;
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  background-image: url("./assets/pattern.png");
+  background-repeat: repeat-x;
+  background-color: rgba(255,255,255,0.8);
+}
+
+#markers{
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.marker{
+  width: 2px;
+  height: 100%;
   background-color: red;
-  grid-area: "top";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.marker span{
+  padding: 2px;
+  font-size: 12px;
+  font-family: 'calibri';
+  color: white;
+  border-radius: 4px;
+  background: red;
+  transform: rotate(-90deg);
 }
