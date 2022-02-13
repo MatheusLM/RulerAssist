@@ -28,6 +28,7 @@ let controls = {
   clickable: true,
   kiosk: false,
   showControls: false,
+  help: true,
 }
 
 let gridData = {
@@ -42,6 +43,9 @@ let gridData = {
   y: 240
 }
 
+function updateHelp(){
+  mainWindow.kiosk = controls.help
+}
 function updateData() {
   let pos = mainWindow.getPosition()
   let size = mainWindow.getSize()
@@ -86,6 +90,7 @@ const createWindow = () => {
     sendGrid(gridData)
     sendRuler(rulerData)
     sendControls(controls, data)
+    updateHelp()
     console.log("Started app");
   })
   mainWindow.loadFile("./index.html");
@@ -141,6 +146,12 @@ function sendRuler(newRulerData){
 }
 
 function setupKeys(globalShortcut){
+  // Toggle Help Screen
+  globalShortcut.register("Alt+H", () => {
+    controls.help = !controls.help;
+    mainWindow.kiosk = controls.help
+    sendControls(controls, data)
+  });
   // Fast mode
   globalShortcut.register("Scrolllock", () => {
     controls.fast = !controls.fast;
@@ -222,21 +233,6 @@ function setupKeys(globalShortcut){
     updateWindow()
     sendControls(controls, data)
   });
-  // Markers controls
-  globalShortcut.register("Alt+Insert", () => {
-    updateData()
-    let step = (controls.symmetrical) ? 2 : 1
-    controls.markers += (controls.markers < 30) ? step : 0
-    sendControls(controls, data)
-    updateWindow()
-  });
-  globalShortcut.register("Alt+Delete", () => {
-    updateData()
-    let step = (controls.symmetrical) ? 2 : 1
-    controls.markers -= (controls.markers > 2) ? step : 0
-    sendControls(controls, data)
-    updateWindow()
-  });
 
   // Clickable control
   globalShortcut.register("Alt+num0", () => {
@@ -271,14 +267,31 @@ function setupKeys(globalShortcut){
     sendControls(controls, data)
     sendGrid(gridData)
   });
+  // Markers controls
+  globalShortcut.register("Alt+Insert", () => {
+    updateData()
+    let step = (controls.symmetrical) ? 2 : 1
+    controls.markers += (controls.markers < 30) ? step : 0
+    sendControls(controls, data)
+    updateWindow()
+  });
+  globalShortcut.register("Alt+Delete", () => {
+    updateData()
+    let step = (controls.symmetrical) ? 2 : 1
+    controls.markers -= (controls.markers > 2) ? step : 0
+    sendControls(controls, data)
+    updateWindow()
+  });
 
   // Grid show
   globalShortcut.register("Alt+G", () => {
-    gridData.show = !gridData.show
-    sendControls(controls, data)
-    updateData()
-    sendGrid(gridData)
-    mainWindow.kiosk = gridData.show
+    if(!controls.help){
+      gridData.show = !gridData.show
+      mainWindow.kiosk = gridData.show
+      sendControls(controls, data)
+      updateData()
+      sendGrid(gridData)
+    }
   });
 
   // Grid controls rows and columns

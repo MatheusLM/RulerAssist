@@ -8,6 +8,7 @@
   font-size: 14px;
   box-sizing: border-box;
   transition-duration: 0s;
+  font-family: 'calibri';
 }
 #html{
   transform-origin: 50% 50%;
@@ -61,7 +62,6 @@ body{
 .marker span{
   padding: 0 4px 1px 4px;
   font-weight: bold;
-  font-family: 'calibri';
   color: white;
   border-radius: 4px;
   background: #0e0e0e;
@@ -72,7 +72,7 @@ body{
 #controlsRuler, #controlsGrid{
   position: absolute;
   visibility: hidden;
-  z-index: 999;
+  z-index: 100;
   width: 100vw;
   height: 40px;
   margin-top: 56px;
@@ -95,7 +95,6 @@ body{
 }
 .buttonContainer label{
   font-size: 12px;
-  font-family: 'calibri';
   display: block;
   height: 13px;
   color: #0e0e0e;
@@ -104,7 +103,6 @@ body{
 }
 .buttonContainer input{
   font-size: 12px;
-  font-family: 'calibri';
   width: 100%;
   max-width: 80px;
   border: none;
@@ -116,8 +114,6 @@ body{
   visibility: hidden;
   position: absolute;
   display: flex;
-  user-select: none;
-  -webkit-app-region: drag;
   width: 100vw;
   height: 100vh;
   background-color: transparent;
@@ -126,6 +122,8 @@ body{
 #gridContainer{
   position: absolute;
   background-color: transparent;
+  user-select: none;
+  -webkit-app-region: drag;
 }
 #vertical, #horizontal{
   position: absolute;
@@ -158,11 +156,10 @@ body{
   background-color: red;
 }
 .horizontal-line span, .vertical-line span{
-  font-family: 'calibri';
   font-size: 14px;
   display: blo3k;
   position: absolute;
-  z-index: 5;
+  z-index: 50;
   padding: 2px 4px;
   background-color: red;
   color: white;
@@ -177,4 +174,52 @@ body{
 
 .horizontal-line:first-of-type span{
   transform: translateX(95%)
+}
+
+#help{
+  position: absolute;
+  display: flex;
+  z-index: 999;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  color: #0e0e0e;
+}
+#help .center{
+  flex-grow: 0;
+  flex-shrink: 1;
+  width: fit-content;
+  height: auto;
+  padding: 8px;
+  background-color: rgba(255,255,255,0.8);
+}
+#help .group{
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 4px 8px 16px 8px;
+  border-bottom: 1px solid #0e0e0e;
+}
+#help .group:last-of-type{
+  border-bottom: none;
+  padding-bottom: 8px;
+}
+#help h1{
+  font-size: 24px;
+  font-weight: bold;
+}
+#help p{
+  width: 100%;
+  font-size: 18px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+#help b{
+  font-weight: bold;
+}
+#help span{
+  padding-left: 16px;
 }

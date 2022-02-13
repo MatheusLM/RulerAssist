@@ -11,6 +11,8 @@ let stepSize = 0;
 const html = document.getElementById("html");
 const body = document.getElementById("body");
 
+const help = document.getElementById("help");
+
 const ruler = document.getElementById("ruler");
 const markers = document.getElementById("markers");
 const controlsRuler = document.getElementById("controlsRuler");
@@ -39,8 +41,10 @@ ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData, new
   rulerData = newRulerData;
   gridData = newGridData
   rulerEquivalent.value = rulerData.equivalent;
-  grid.style.visibility = (gridData.show) ? "visible" : "hidden"
-  ruler.style.visibility = (!gridData.show) ? "visible" : "hidden"
+
+  help.style.visibility = (controls.help) ? "visible" : "hidden"
+  grid.style.visibility = (gridData.show && !controls.help) ? "visible" : "hidden"
+  ruler.style.visibility = (!gridData.show && !controls.help) ? "visible" : "hidden"
   updateGrid()
 });
 
@@ -67,7 +71,7 @@ ipcRenderer.on("syncGrid", (event, newGridData) => {
 
 ipcRenderer.on("sendTheme", (event, newData) => {
   theme = newData;
-  
+
   grid.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
   ruler.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
 
@@ -115,6 +119,10 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   // CONTROLS PANEL
   verifyControls()
   updateGrid()
+  help.style.visibility = (controls.help) ? "visible" : "hidden"
+  grid.style.visibility = (gridData.show && !controls.help) ? "visible" : "hidden"
+  ruler.style.visibility = (!gridData.show && !controls.help) ? "visible" : "hidden"
+  
   
 });
 
