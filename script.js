@@ -4,6 +4,7 @@ let theme = {};
 let data = {};
 let controls = {};
 let rulerData = {};
+let gridData = {};
 
 let stepSize = 0;
 
@@ -16,23 +17,53 @@ const controlsPanel = document.getElementById("controls");
 
 const rulerEquivalent = document.getElementById("rulerEquivalent");
 
-ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData) => {
+const grid = document.getElementById("grid");
+const gridContainer = document.getElementById("gridContainer");
+const gridRows = document.getElementById("gridRows");
+const gridColumns = document.getElementById("gridColumns");
+const gridWidth = document.getElementById("gridWidth");
+const gridHeight = document.getElementById("gridHeight");
+const gridX = document.getElementById("gridX");
+const gridY = document.getElementById("gridY");
+
+const gridHorizontal = document.getElementById("horizontal");
+const gridVertical = document.getElementById("vertical");
+
+ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData, newGridData) => {
   theme = newTheme;
   data = newData;
   controls = newControls;
   rulerData = newRulerData;
+  gridData = newGridData
   rulerEquivalent.value = rulerData.equivalent;
+  grid.style.visibility = (gridData.show) ? "visible" : "hidden"
+  ruler.style.visibility = (!gridData.show) ? "visible" : "hidden"
+  updateGrid()
 });
 
 ipcRenderer.on("syncRuler", (event, newRulerData) => {
   rulerData = newRulerData;
   rulerEquivalent.value = rulerData.equivalent;
-  markers.style.backgroundColor = (rulerData.equivalentRuler) ? "rgba(200,255,200,0.65)" : "rgba(255,255,255,0.65)"
+  markers.style.backgroundColor = (rulerData.equivalentRuler) ? "rgba(160,255,160,0.65)" : "transparent"
+});
+
+ipcRenderer.on("syncGrid", (event, newGridData) => {
+  gridData = newGridData;
+  grid.style.visibility = (gridData.show) ? "visible" : "hidden"
+  ruler.style.visibility = (!gridData.show) ? "visible" : "hidden"
+  gridRows.value = gridData.rows
+  gridColumns.value = gridData.columns
+  gridWidth.value = gridData.width
+  gridHeight.value = gridData.height
+  gridX.value = gridData.x
+  gridY.value = gridData.y
+  updateGrid()
 });
 
 ipcRenderer.on("sendTheme", (event, newData) => {
   theme = newData;
   ruler.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
+  grid.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
   html.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
   /* html.style.width = (theme.rotated) ? '100vh' : '100vw';
   html.style.height = (theme.rotated) ? '100vw' : '100vh'; */
@@ -81,5 +112,45 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
 rulerEquivalent.addEventListener('input', (e) => {
   rulerData.equivalent = rulerEquivalent.value
   ipcRenderer.send('resyncRuler', rulerData)
-  console.log(rulerData);
 })
+
+let a = [gridRows, gridColumns, gridWidth, gridHeight, gridX, gridY].forEach( (e) => {
+  e.addEventListener('input', (e) => {
+    gridData.rows = gridRows.value
+    gridData.columns = gridColumns.value
+    gridData.width = gridWidth.value
+    gridData.height = gridHeight.value
+    gridData.x = gridX.value
+    gridData.y = gridY.value
+    updateGrid()
+    ipcRenderer.send('resyncGrid', gridData)
+  })
+} )
+
+function updateGrid(){
+  gridContainer.style.width = gridData.width+'px'
+  gridContainer.style.height = gridData.height+'px'
+  gridContainer.style.marginLeft = gridData.x+'px'
+  gridContainer.style.marginTop = gridData.y+'px'
+  updateGridLines()
+}
+function updateGridLines(){
+  gridHorizontal.innerHTML = ''
+  for(let i=0; i<gridData.rows; i++){
+    let div = document.createElement('div')
+    let text = document.createElement('span')
+    text.append(i)
+    div.append(text)
+    div.className = 'horizontal-line'
+    gridHorizontal.append(div)
+  }
+  gridVertical.innerHTML = ''
+  for(let i=0; i<gridData.columns; i++){
+    let div = document.createElement('div')
+    let text = document.createElement('span')
+    text.append(i)
+    div.append(text)
+    div.className = 'vertical-line'
+    gridVertical.append(div)
+  }
+}

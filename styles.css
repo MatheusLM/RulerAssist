@@ -6,6 +6,7 @@
   margin: 0;
   background-color: transparent;
   font-size: 14px;
+  box-sizing: border-box;
 }
 #html{
   transform-origin: 50% 50%;
@@ -64,6 +65,7 @@ body{
 #controls{
   position: absolute;
   visibility: hidden;
+  z-index: 999;
   width: 100vw;
   height: 40px;
   margin-top: 56px;
@@ -71,6 +73,7 @@ body{
   flex-direction: row;
   justify-content: center;
   align-items: center;
+  -webkit-app-region: none;
 }
 
 .buttonContainer{
@@ -84,20 +87,98 @@ body{
   padding: 0 8px;
 }
 .buttonContainer label{
-  font-size: 12px;
+  font-size: 11px;
   font-family: 'calibri';
   display: block;
-  height: auto;
+  height: 13px;
   color: #0e0e0e;
   font-weight: bold;
   text-transform: uppercase;
 }
 .buttonContainer input{
-  font-size: 12px;
+  font-size: 11px;
   font-family: 'calibri';
-  width: max-content;
-  max-width: 100px;
+  width: 100%;
+  max-width: 80px;
   border: none;
   padding: 2px 0 2px 8px;
   background-color: white;
+}
+
+#grid{
+  visibility: hidden;
+  position: absolute;
+  display: flex;
+  z-index: -1;
+  user-select: none;
+  -webkit-app-region: drag;
+  width: 100vw;
+  height: 100vh;
+  background-color: transparent;
+  border: 1px solid rgba(0,0,0,0.5);
+}
+#gridContainer{
+  position: absolute;
+  background-color: transparent;
+}
+#vertical, #horizontal{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  flex-direction: row;
+}
+#horizontal{
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+.horizontal-line{
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 0;
+  width: 100%;
+  height: 1px;
+  background-color: red;
+}
+.vertical-line{
+  display: flex;
+  align-items: flex-end;
+  flex-grow: 0;
+  height: 100%;
+  width: 1px;
+  background-color: red;
+}
+.horizontal-line span, .vertical-line span{
+  font-family: 'calibri';
+  font-size: 14px;
+  display: blo3k;
+  position: absolute;
+  z-index: 5;
+  padding: 2px 4px;
+  background-color: red;
+  color: white;
+  text-transform: uppercase;
+  margin-right: -10px;
+  transform: translateY(-50%) translateX(30%)
+}
+.vertical-line span{
+  margin-right: 0;
+  margin-bottom: -10px;
+  transform: rotate(-90deg) translateY(-40%) translateX(-50%);
+}
+.vertical-line:first-of-type span{
+  transform: rotate(-90deg) translateX(-50%) translateY(15%);
+}
+.vertical-line:last-of-type span{
+  transform: rotate(-90deg) translateX(-50%) translateY(-80%);
+}
+
+.horizontal-line:first-of-type span{
+  transform: translateX(30%)
+}
+.horizontal-line:last-of-type span{
+  transform: translateY(-95%) translateX(30%)
 }

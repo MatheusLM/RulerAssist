@@ -3,9 +3,9 @@ const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 var mainWindow;
 let data = {
   width: 600,
-  height: 56,
+  height: 600,
   x: 300,
-  y: 970
+  y: 370
 };
 
 let theme = {
@@ -28,6 +28,16 @@ let controls = {
   clickable: true,
   kiosk: false,
   showControls: true,
+}
+
+let gridData = {
+  show: false,
+  width: 350,
+  height: 350,
+  columns: 3,
+  rows: 3,
+  x: 120,
+  y: 120
 }
 
 function updateData() {
@@ -68,19 +78,22 @@ const createWindow = () => {
   });
 
   /* mainWindow.webContents.openDevTools(true); */
+  sendSync(theme, data, controls, rulerData, gridData)
   updateWindow()
   mainWindow.loadFile("./index.html");
 };
 
 app.whenReady().then(() => {
   createWindow();
-
   mainWindow.webContents.send("syncRuler", rulerData);
-  mainWindow.webContents.send("sync", theme, data, controls, rulerData);
 
   ipcMain.on("resyncRuler", (event, newRulerData) => {
     rulerData.equivalent = newRulerData.equivalent
     mainWindow.webContents.send("sendControls", controls, data);
+  })
+
+  ipcMain.on("resyncGrid", (event, newGridData) => {
+    gridData = newGridData
   })
 
   mainWindow.on('resize', () => {
@@ -96,14 +109,14 @@ app.whenReady().then(() => {
     controls.showControls = true;
     updateData()
     data.height += (data.height <= 56) ? 40 : 0;
-    updateWindow()
     mainWindow.webContents.send("sendControls", controls, data);
+    updateWindow()
   })
   mainWindow.on("blur", () => {
     controls.showControls = false;
     data.height -= (data.height > 96) ? 0 : 40;
-    updateWindow()
     mainWindow.webContents.send("sendControls", controls, data);
+    updateWindow()
   })
 
   updateData()
@@ -112,6 +125,9 @@ app.whenReady().then(() => {
 
 function sendControls(controls, data){
   mainWindow.webContents.send("sendControls", controls, data);
+}
+function sendSync(theme, data, controls, rulerData, gridData){
+  mainWindow.webContents.send("sync", theme, data, controls, rulerData, gridData);
 }
 
 function setupKeys(globalShortcut){
@@ -197,6 +213,7 @@ function setupKeys(globalShortcut){
     sendControls(controls, data)
     updateWindow()
   });
+
   // Kiosk controls
   globalShortcut.register("Alt+F", () => {
     updateData()
@@ -205,15 +222,14 @@ function setupKeys(globalShortcut){
     updateClickable(controls.kiosk)
     sendControls(controls, data)
   });
+
   // Clickable control
   globalShortcut.register("Alt+num0", () => {
     updateData()
     controls.clickable = !controls.clickable
     updateClickable(controls.clickable)
   });
-  // 
-  globalShortcut.register("Shift+numadd", () => {});
-  globalShortcut.register("Shift+numsub", () => {});
+
   // Equivalent ruler
   globalShortcut.register("Alt+E", () => {
     updateData()
@@ -221,6 +237,7 @@ function setupKeys(globalShortcut){
     mainWindow.webContents.send("syncRuler", rulerData);
     mainWindow.webContents.send("sendControls", controls, data);
   });
+
   // Symmetrical ruler
   globalShortcut.register("Alt+S", () => {
     updateData()
@@ -231,5 +248,61 @@ function setupKeys(globalShortcut){
     updateData()
     controls.showSizes = !controls.showSizes
     sendControls(controls, data)
+  });
+
+  // Grid controls
+  globalShortcut.register("Alt+G", () => {
+    gridData.show = !gridData.show
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("Shift+numadd", () => {
+    if (gridData.columns < 30){ gridData.columns += 1 }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("Shift+numsub", () => {
+    if (gridData.columns > 0){ gridData.columns -= 1 }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("CmdOrCtrl+numadd", () => {
+    if (gridData.rows < 30){ gridData.rows += 1 }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("CmdOrCtrl+numsub", () => {
+    if (gridData.rows > 0){ gridData.rows -= 1 }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+
+  // Grid controls position
+  globalShortcut.register("CmdOrCtrl+up", () => {
+    if ((gridData.y - controls.modifier) > 0){
+      gridData.y -= controls.modifier
+    }else{
+      gridData.y = 1
+    }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("CmdOrCtrl+down", () => {
+    if ((gridData.y + controls.modifier) < data.height - gridData.height){
+      gridData.y += controls.modifier
+    }else{
+      gridData.y = data.height - gridData.height - 1
+    }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("CmdOrCtrl+left", () => {
+    if ((gridData.x - controls.modifier) > 0){
+      gridData.x -= controls.modifier
+    }else{
+      gridData.x = 1
+    }
+    mainWindow.webContents.send("syncGrid", gridData);
+  });
+  globalShortcut.register("CmdOrCtrl+right", () => {
+    if ((gridData.x + controls.modifier) < data.width - gridData.width){
+      gridData.x += controls.modifier
+    }else{
+      gridData.x = data.width - gridData.width - 1
+    }
+    mainWindow.webContents.send("syncGrid", gridData);
   });
 }
