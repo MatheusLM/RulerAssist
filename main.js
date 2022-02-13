@@ -287,7 +287,7 @@ function setupKeys(globalShortcut){
     sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Delete", () => {
-    if (gridData.columns > 0){ gridData.columns -= 1 }
+    if (gridData.columns > 1){ gridData.columns -= 1 }
     sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+Insert", () => {
@@ -295,7 +295,7 @@ function setupKeys(globalShortcut){
     sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+Delete", () => {
-    if (gridData.rows > 0){ gridData.rows -= 1 }
+    if (gridData.rows > 1){ gridData.rows -= 1 }
     sendGrid(gridData)
   });
 
