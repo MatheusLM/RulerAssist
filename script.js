@@ -49,7 +49,7 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   markers.innerHTML = ''
   if(controls.symmetrical){
     let markersCount = Math.ceil(controls.markers/2)
-    stepSize = (rulerData.equivalentRuler) ? (rulerData.equivalent/2) / markersCount : data.width / markersCount;
+    stepSize = (rulerData.equivalentRuler) ? (rulerData.equivalent/2) / markersCount : (data.width / 2) / markersCount;
     for (let i = markersCount; i > 0; i--){
       markersNumber.push(i)
     }

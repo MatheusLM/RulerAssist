@@ -170,13 +170,13 @@ function setupKeys(globalShortcut){
     controls.modifier = (controls.fast)? 10 : 1;
   });
   // Size controls
-  globalShortcut.register("CmdOrCtrl+numadd", () => {
+  globalShortcut.register("Alt+numadd", () => {
     updateData()
     data.width += controls.modifier;
     updateWindow()
     sendControls(controls, data)
   });
-  globalShortcut.register("CmdOrCtrl+numsub", () => {
+  globalShortcut.register("Alt+numsub", () => {
     updateData()
     data.width -= controls.modifier;
     updateWindow()
