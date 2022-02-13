@@ -67,15 +67,14 @@ ipcRenderer.on("syncGrid", (event, newGridData) => {
 
 ipcRenderer.on("sendTheme", (event, newData) => {
   theme = newData;
-  ruler.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
+  
   grid.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
+  ruler.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
 
   // Rotates
   html.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
-  controlsRuler.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
   controlsGrid.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
-  /* html.style.width = (theme.rotated) ? '100vh' : '100vw';
-  html.style.height = (theme.rotated) ? '100vw' : '100vh'; */
+  controlsRuler.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
 });
 
 ipcRenderer.on("sendControls", (event, newControls, newData) => {

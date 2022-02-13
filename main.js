@@ -275,10 +275,10 @@ function setupKeys(globalShortcut){
   // Grid show
   globalShortcut.register("Alt+G", () => {
     gridData.show = !gridData.show
-    mainWindow.kiosk = gridData.show
     sendControls(controls, data)
     updateData()
     sendGrid(gridData)
+    mainWindow.kiosk = gridData.show
   });
 
   // Grid controls rows and columns

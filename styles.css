@@ -7,10 +7,11 @@
   background-color: transparent;
   font-size: 14px;
   box-sizing: border-box;
+  transition-duration: 0s;
 }
 #html{
   transform-origin: 50% 50%;
-  transition-duration: 0.2s;
+  transition-duration: transform 0.2s;
 }
 body{
   width: 100vw;
