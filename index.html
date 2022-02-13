@@ -8,41 +8,52 @@
   <body>
     <div id="ruler">
       <div id="markers"></div>
+      <div id="markerLimit"></div>
+      <div id="controlsRuler">
+        <div class="buttonContainer">
+          <label for="rulerEquivalent">Ruler Equivalent</label>
+          <input type="number" id="rulerEquivalent" min="1" max="4096"/>
+        </div>
+      </div>
     </div>
     <div id="grid">
       <div id="gridContainer">
         <div id="horizontal"></div>
         <div id="vertical"></div>
       </div>
-    </div>
-    <div id="controls">
-      <div class="buttonContainer">
-        <label for="rulerEquivalent">Ruler Equivalent</label>
-        <input type="number" id="rulerEquivalent" min="1" max="4096"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridRows">G.Rows</label>
-        <input type="number" id="gridRows" min="0" max="30"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridColumns">G.Columns</label>
-        <input type="number" id="gridColumns" min="0" max="30"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridWidth">G.Width</label>
-        <input type="number" id="gridWidth" min="0" max="4096"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridHeight">G.Height</label>
-        <input type="number" id="gridHeight" min="0" max="4096"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridX">G.X</label>
-        <input type="number" id="gridX" min="0" max="4096"/>
-      </div>
-      <div class="buttonContainer">
-        <label for="gridY">G.Y</label>
-        <input type="number" id="gridY" min="0" max="4096"/>
+      <div id="controlsGrid">
+        <div class="buttonContainer">
+          <label for="gridRows">G.Rows</label>
+          <input type="number" id="gridRows" min="0" max="30"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridColumns">G.Columns</label>
+          <input type="number" id="gridColumns" min="0" max="30"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridWidth">G.Width</label>
+          <input type="number" id="gridWidth" min="0" max="4096"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridHeight">G.Height</label>
+          <input type="number" id="gridHeight" min="0" max="4096"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridWidthEquivalent">G.W.Equiv</label>
+          <input type="number" id="gridWidthEquivalent" min="0" max="4096"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridHeightEquivalent">G.H.Equiv</label>
+          <input type="number" id="gridHeightEquivalent" min="0" max="4096"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridX">G.X</label>
+          <input type="number" id="gridX" min="0" max="4096"/>
+        </div>
+        <div class="buttonContainer">
+          <label for="gridY">G.Y</label>
+          <input type="number" id="gridY" min="0" max="4096"/>
+        </div>
       </div>
     </div>
     <script src="./script.js"></script>
