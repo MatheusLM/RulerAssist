@@ -139,7 +139,7 @@ function updateGridLines(){
   for(let i=0; i<gridData.rows; i++){
     let div = document.createElement('div')
     let text = document.createElement('span')
-    text.append(i)
+    text.append(parseInt(i+1))
     div.append(text)
     div.className = 'horizontal-line'
     gridHorizontal.append(div)
@@ -148,7 +148,7 @@ function updateGridLines(){
   for(let i=0; i<gridData.columns; i++){
     let div = document.createElement('div')
     let text = document.createElement('span')
-    text.append(i)
+    text.append(parseInt(i+1))
     div.append(text)
     div.className = 'vertical-line'
     gridVertical.append(div)

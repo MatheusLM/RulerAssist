@@ -3,9 +3,9 @@ const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 var mainWindow;
 let data = {
   width: 600,
-  height: 600,
-  x: 300,
-  y: 370
+  height: 56,
+  x: 660,
+  y: 512
 };
 
 let theme = {
@@ -32,12 +32,12 @@ let controls = {
 
 let gridData = {
   show: false,
-  width: 350,
-  height: 350,
-  columns: 3,
-  rows: 3,
-  x: 120,
-  y: 120
+  width: 600,
+  height: 600,
+  columns: 5,
+  rows: 5,
+  x: 660,
+  y: 240
 }
 
 function updateData() {
@@ -79,13 +79,14 @@ const createWindow = () => {
 
   /* mainWindow.webContents.openDevTools(true); */
   sendSync(theme, data, controls, rulerData, gridData)
+  mainWindow.webContents.send("syncGrid", gridData);
+  mainWindow.webContents.send("syncRuler", rulerData);
   updateWindow()
   mainWindow.loadFile("./index.html");
 };
 
 app.whenReady().then(() => {
   createWindow();
-  mainWindow.webContents.send("syncRuler", rulerData);
 
   ipcMain.on("resyncRuler", (event, newRulerData) => {
     rulerData.equivalent = newRulerData.equivalent
@@ -131,7 +132,12 @@ function sendSync(theme, data, controls, rulerData, gridData){
 }
 
 function setupKeys(globalShortcut){
-  // window data
+  // Fast mode
+  globalShortcut.register("Scrolllock", () => {
+    controls.fast = !controls.fast;
+    controls.modifier = (controls.fast)? 10 : 1;
+  });
+  // Window position
   globalShortcut.register("Alt+up", () => {
     updateData();
     data.y -= controls.modifier;
@@ -153,13 +159,14 @@ function setupKeys(globalShortcut){
     updateWindow()
   });
 
-  // theme data
+  // Theme toggle
   globalShortcut.register("Alt+T", () => {
     updateData()
     theme.dark = !theme.dark;
     mainWindow.webContents.send("sendTheme", theme);
     updateWindow()
   });
+  // Window rotate
   globalShortcut.register("Alt+R", () => {
     updateData()
     theme.rotated = !theme.rotated;
@@ -169,22 +176,16 @@ function setupKeys(globalShortcut){
     mainWindow.webContents.send("sendTheme", theme);
     updateWindow()
   });
+  // Window opacity
   globalShortcut.register("Alt+PageUp", () => {
-    theme.rotated = !theme.rotated;
     theme.opacity += (theme.opacity < 1) ? 0.05 : 0;
     updateOpacity()
   });
   globalShortcut.register("Alt+PageDown", () => {
-    theme.rotated = !theme.rotated;
     theme.opacity -= (theme.opacity > 0.1) ? 0.05 : 0;
     updateOpacity()
   });
 
-  // fast mode
-  globalShortcut.register("Scrolllock", () => {
-    controls.fast = !controls.fast;
-    controls.modifier = (controls.fast)? 10 : 1;
-  });
   // Size controls
   globalShortcut.register("Alt+numadd", () => {
     updateData()
@@ -214,6 +215,13 @@ function setupKeys(globalShortcut){
     updateWindow()
   });
 
+  // Clickable control
+  globalShortcut.register("Alt+num0", () => {
+    updateData()
+    controls.clickable = !controls.clickable
+    updateClickable(controls.clickable)
+  });
+
   // Kiosk controls
   globalShortcut.register("Alt+F", () => {
     updateData()
@@ -222,14 +230,6 @@ function setupKeys(globalShortcut){
     updateClickable(controls.kiosk)
     sendControls(controls, data)
   });
-
-  // Clickable control
-  globalShortcut.register("Alt+num0", () => {
-    updateData()
-    controls.clickable = !controls.clickable
-    updateClickable(controls.clickable)
-  });
-
   // Equivalent ruler
   globalShortcut.register("Alt+E", () => {
     updateData()
@@ -237,13 +237,13 @@ function setupKeys(globalShortcut){
     mainWindow.webContents.send("syncRuler", rulerData);
     mainWindow.webContents.send("sendControls", controls, data);
   });
-
   // Symmetrical ruler
   globalShortcut.register("Alt+S", () => {
     updateData()
     controls.symmetrical = !controls.symmetrical
     sendControls(controls, data)
   });
+  // Show steps size
   globalShortcut.register("Alt+Enter", () => {
     updateData()
     controls.showSizes = !controls.showSizes
@@ -253,21 +253,25 @@ function setupKeys(globalShortcut){
   // Grid controls
   globalShortcut.register("Alt+G", () => {
     gridData.show = !gridData.show
+    mainWindow.kiosk = gridData.show
+    updateClickable(gridData.show)
+    sendControls(controls, data)
     mainWindow.webContents.send("syncGrid", gridData);
   });
-  globalShortcut.register("Shift+numadd", () => {
+  // Grid controls rows and columns
+  globalShortcut.register("CmdOrCtrl+Insert", () => {
     if (gridData.columns < 30){ gridData.columns += 1 }
     mainWindow.webContents.send("syncGrid", gridData);
   });
-  globalShortcut.register("Shift+numsub", () => {
+  globalShortcut.register("CmdOrCtrl+Delete", () => {
     if (gridData.columns > 0){ gridData.columns -= 1 }
     mainWindow.webContents.send("syncGrid", gridData);
   });
-  globalShortcut.register("CmdOrCtrl+numadd", () => {
+  globalShortcut.register("CmdOrCtrl+Shift+Insert", () => {
     if (gridData.rows < 30){ gridData.rows += 1 }
     mainWindow.webContents.send("syncGrid", gridData);
   });
-  globalShortcut.register("CmdOrCtrl+numsub", () => {
+  globalShortcut.register("CmdOrCtrl+Shift+Delete", () => {
     if (gridData.rows > 0){ gridData.rows -= 1 }
     mainWindow.webContents.send("syncGrid", gridData);
   });
