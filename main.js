@@ -1,4 +1,4 @@
-const { app, BrowserWindow, globalShortcut } = require("electron");
+const { app, BrowserWindow, globalShortcut, ipcMain } = require("electron");
 
 var mainWindow;
 let data = {
@@ -15,8 +15,8 @@ let theme = {
 }
 
 let rulerData = {
-  size: data.width,
-  equivalent: data.width
+  equivalent: 1920,
+  equivalentRuler: true
 }
 
 let controls = {
@@ -38,12 +38,6 @@ function updateData() {
     height: size[1],
     x: pos[0],
     y: pos[1]
-  }
-}
-function updateRulerData() {
-  rulerData = {
-    size: data.width,
-    equivalent: data.width
   }
 }
 function updateWindow() {
@@ -80,13 +74,18 @@ const createWindow = () => {
 
 app.whenReady().then(() => {
   createWindow();
-  updateData()
-  updateRulerData()
+
+  mainWindow.webContents.send("syncRuler", rulerData);
   mainWindow.webContents.send("sync", theme, data, controls, rulerData);
-  mainWindow.webContents.send("sendControls", controls, data);
+
+  ipcMain.on("resyncRuler", (event, newRulerData) => {
+    rulerData.equivalent = newRulerData.equivalent
+    mainWindow.webContents.send("sendControls", controls, data);
+  })
 
   mainWindow.on('resize', () => {
     updateData()
+    mainWindow.webContents.send("syncRuler", rulerData);
     mainWindow.webContents.send("sendControls", controls, data);
   });
   mainWindow.on("will-move", () => {
@@ -165,7 +164,6 @@ function setupKeys(globalShortcut){
     updateOpacity()
   });
 
-  // controls data
   // fast mode
   globalShortcut.register("Scrolllock", () => {
     controls.fast = !controls.fast;
@@ -207,17 +205,21 @@ function setupKeys(globalShortcut){
     updateClickable(controls.kiosk)
     sendControls(controls, data)
   });
+  // Clickable control
   globalShortcut.register("Alt+num0", () => {
     updateData()
     controls.clickable = !controls.clickable
     updateClickable(controls.clickable)
   });
   // 
-  globalShortcut.register("Shift+numadd", () => {
-
-  });
-  globalShortcut.register("Shift+numsub", () => {
-    
+  globalShortcut.register("Shift+numadd", () => {});
+  globalShortcut.register("Shift+numsub", () => {});
+  // Equivalent ruler
+  globalShortcut.register("Alt+E", () => {
+    updateData()
+    rulerData.equivalentRuler = !rulerData.equivalentRuler
+    mainWindow.webContents.send("syncRuler", rulerData);
+    mainWindow.webContents.send("sendControls", controls, data);
   });
   // Symmetrical ruler
   globalShortcut.register("Alt+S", () => {

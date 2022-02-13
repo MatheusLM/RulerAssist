@@ -1,9 +1,11 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, ipcMain } = require("electron");
 
 let theme = {};
 let data = {};
 let controls = {};
 let rulerData = {};
+
+let stepSize = 0;
 
 const html = document.getElementById("html");
 const body = document.getElementById("body");
@@ -12,7 +14,6 @@ const ruler = document.getElementById("ruler");
 const markers = document.getElementById("markers");
 const controlsPanel = document.getElementById("controls");
 
-const rulerSize = document.getElementById("rulerSize");
 const rulerEquivalent = document.getElementById("rulerEquivalent");
 
 ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData) => {
@@ -20,8 +21,13 @@ ipcRenderer.on("sync", (event, newTheme, newData, newControls, newRulerData) => 
   data = newData;
   controls = newControls;
   rulerData = newRulerData;
-  rulerSize.value = newRulerData.size
-  rulerEquivalent.value = newRulerData.equivalent;
+  rulerEquivalent.value = rulerData.equivalent;
+});
+
+ipcRenderer.on("syncRuler", (event, newRulerData) => {
+  rulerData = newRulerData;
+  rulerEquivalent.value = rulerData.equivalent;
+  markers.style.backgroundColor = (rulerData.equivalentRuler) ? "rgba(200,255,200,0.65)" : "rgba(255,255,255,0.65)"
 });
 
 ipcRenderer.on("sendTheme", (event, newData) => {
@@ -37,12 +43,13 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   data = newData
 
   // MARKERS
-  let stepSize = data.width / controls.markers
+  stepSize = (rulerData.equivalentRuler) ? rulerData.equivalent / controls.markers : data.width / controls.markers;
+  
   let markersNumber = []
   markers.innerHTML = ''
   if(controls.symmetrical){
     let markersCount = Math.ceil(controls.markers/2)
-    stepSize = Math.ceil((data.width / 2) / markersCount)
+    stepSize = (rulerData.equivalentRuler) ? (rulerData.equivalent/2) / markersCount : data.width / markersCount;
     for (let i = markersCount; i > 0; i--){
       markersNumber.push(i)
     }
@@ -71,9 +78,8 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   
 });
 
-rulerSize.addEventListener('input', (e) => {
-  rulerData.size = rulerSize.value
-})
 rulerEquivalent.addEventListener('input', (e) => {
   rulerData.equivalent = rulerEquivalent.value
+  ipcRenderer.send('resyncRuler', rulerData)
+  console.log(rulerData);
 })
