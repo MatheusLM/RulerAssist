@@ -69,7 +69,11 @@ ipcRenderer.on("sendTheme", (event, newData) => {
   theme = newData;
   ruler.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
   grid.style.filter = (theme.dark) ? 'invert(0%)' : 'invert(100%)';
+
+  // Rotates
   html.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
+  controlsRuler.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
+  controlsGrid.style.transform = (theme.rotated) ? 'rotateZ(-180deg)' : '';
   /* html.style.width = (theme.rotated) ? '100vh' : '100vw';
   html.style.height = (theme.rotated) ? '100vw' : '100vh'; */
 });
@@ -111,6 +115,7 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
 
   // CONTROLS PANEL
   verifyControls()
+  updateGrid()
   
 });
 
@@ -132,7 +137,7 @@ let a = [gridRows, gridColumns, gridWidth, gridHeight, gridWidthEquivalent, grid
     updateGrid()
     ipcRenderer.send('resyncGrid', gridData)
   })
-} )
+})
 
 function verifyControls(){
   if (controls.showControls){
@@ -159,23 +164,24 @@ function updateGrid(){
 }
 function updateGridLines(){
   gridHorizontal.innerHTML = ''
-  let stepHeight = (rulerData.equivalentRuler) ? rulerData.equivalent / controls.markers : data.width / controls.markers;
-  let heightText = (controls.showSizes) ? 'step' + ':' + Math.floor('step'*stepSize) : 'step'
-  let spanText = (controls.showSizes) ? 'step' + ':' + Math.floor('step'*stepSize) : 'step'
-
-  for(let i=0; i<gridData.rows; i++){
+  let stepHeight = (rulerData.equivalentRuler) ? gridData.heightEquivalent / gridData.rows : gridData.height / gridData.rows;
+  let stepWidth = (rulerData.equivalentRuler) ? gridData.widthEquivalent / gridData.columns : gridData.width / gridData.columns;
+  
+  for(let step=0; step<=gridData.rows; step++){
     let div = document.createElement('div')
     let text = document.createElement('span')
-    text.append(parseInt(i+1))
+    let heightText = (controls.showSizes) ? step + ':' + Math.floor(step*stepHeight) : step
+    text.append(heightText)
     div.append(text)
     div.className = 'horizontal-line'
     gridHorizontal.append(div)
   }
   gridVertical.innerHTML = ''
-  for(let i=0; i<gridData.columns; i++){
+  for(let step=0; step<=gridData.columns; step++){
     let div = document.createElement('div')
     let text = document.createElement('span')
-    text.append(parseInt(i+1))
+    let widthText = (controls.showSizes) ? step + ':' + Math.floor(step*stepWidth) : step
+    text.append(widthText)
     div.append(text)
     div.className = 'vertical-line'
     gridVertical.append(div)

@@ -93,7 +93,7 @@ body{
   padding: 0 8px;
 }
 .buttonContainer label{
-  font-size: 11px;
+  font-size: 12px;
   font-family: 'calibri';
   display: block;
   height: 13px;
@@ -102,7 +102,7 @@ body{
   text-transform: uppercase;
 }
 .buttonContainer input{
-  font-size: 11px;
+  font-size: 12px;
   font-family: 'calibri';
   width: 100%;
   max-width: 80px;

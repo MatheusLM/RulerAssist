@@ -151,8 +151,10 @@ function setupKeys(globalShortcut){
     updateData()
     controls.showControls = !controls.showControls;
     if (controls.showControls){
+      updateClickable(true);
       data.height += (data.height <= 56) ? 40 : 0;
     }else{
+      updateClickable(controls.clickable);
       data.height -= (data.height > 96) ? 0 : 40;
     }
     sendControls(controls, data)
