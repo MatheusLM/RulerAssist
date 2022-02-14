@@ -1,234 +1,237 @@
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 * {
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-  font-size: 14px;
-  box-sizing: border-box;
-  transition-duration: 0s;
-  font-family: "calibri";
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition-duration: 0s;
+    font-family: 'calibri';
 }
 #html {
-  transform-origin: 50% 50%;
-  transition-duration: transform 0.2s;
+    transform-origin: 50% 50%;
+    transition-duration: transform 0.2s;
 }
 body {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
 }
 
 #ruler {
-  height: 56px;
-  display: flex;
-  flex-grow: 1;
-  flex-shrink: 1;
-  background-image: url("./assets/pattern.png");
-  background-size: 10px 56px;
-  background-repeat: repeat-x;
-  background-color: rgba(255, 255, 255, 0.8);
-  user-select: none;
-  -webkit-app-region: drag;
+    height: 56px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 1;
+    background-image: url('./assets/pattern.png');
+    background-size: 10px 56px;
+    background-repeat: repeat-x;
+    background-color: rgba(255, 255, 255, 0.8);
+    transform-origin: 50% 50%;
+    user-select: none;
+    -webkit-app-region: drag;
 }
 
 #markers {
-  display: flex;
-  flex-grow: 1;
-  flex-shrink: 0;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-left: -1px;
+    display: flex;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-left: -1px;
 }
 #markerLimit {
-  position: absolute;
-  top: calc(100vh - 1px);
-  width: 100vw;
-  height: 1px;
-  background-color: #0e0e0e;
+    position: absolute;
+    top: calc(100vh - 1px);
+    width: 100vw;
+    height: 1px;
+    background-color: #0e0e0e;
 }
 .marker:first-of-type {
-  transform: translateX(1px);
+    transform: translateX(1px);
 }
 .marker:first-of-type span {
-  transform: rotate(-90deg) translateX(-45%) translateY(50%);
+    transform: rotate(-90deg) translateX(-45%) translateY(50%);
 }
 .marker:last-of-type span {
-  transform: rotate(-90deg) translateX(-45%) translateY(-50%);
+    transform: rotate(-90deg) translateX(-45%) translateY(-50%);
 }
 .marker {
-  width: 1px;
-  height: 100vh;
-  background-color: #0e0e0e;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+    width: 1px;
+    height: 100vh;
+    background-color: #0e0e0e;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 }
 .marker span {
-  padding: 0 4px 1px 4px;
-  font-weight: bold;
-  color: white;
-  border-radius: 4px;
-  background: #0e0e0e;
-  transform-origin: 50% 50%;
-  transform: rotate(-90deg) translateX(-45%) translateY(0%);
+    padding: 0 4px 1px 4px;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    background: #0e0e0e;
+    transform-origin: 50% 50%;
+    transform: rotate(-90deg) translateX(-45%) translateY(0%);
 }
 
 #controlsRuler,
 #controlsGrid {
-  position: absolute;
-  visibility: hidden;
-  z-index: 100;
-  width: 100vw;
-  height: 40px;
-  margin-top: 56px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  -webkit-app-region: none;
+    position: absolute;
+    visibility: hidden;
+    z-index: 100;
+    width: 100vw;
+    height: 40px;
+    margin-top: 56px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    -webkit-app-region: none;
 }
 
 .buttonContainer {
-  width: fit-content;
-  height: 100%;
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding: 0 8px;
+    width: fit-content;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 8px;
 }
 .buttonContainer label {
-  font-size: 12px;
-  display: block;
-  height: 13px;
-  color: #0e0e0e;
-  font-weight: bold;
-  text-transform: uppercase;
+    font-size: 12px;
+    display: block;
+    height: 13px;
+    color: #0e0e0e;
+    font-weight: bold;
+    text-transform: uppercase;
 }
 .buttonContainer input {
-  font-size: 12px;
-  width: 100%;
-  max-width: 80px;
-  border: none;
-  padding: 2px 0 2px 8px;
-  background-color: white;
+    font-size: 12px;
+    width: 100%;
+    max-width: 80px;
+    border: none;
+    padding: 2px 0 2px 8px;
+    background-color: white;
 }
 
 #grid {
-  visibility: hidden;
-  position: absolute;
-  display: flex;
-  width: 100vw;
-  height: 100vh;
-  background-color: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.5);
+    visibility: hidden;
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.5);
 }
 #gridContainer {
-  position: absolute;
-  background-color: transparent;
-  user-select: none;
-  -webkit-app-region: drag;
+    position: absolute;
+    background-color: transparent;
+    user-select: none;
+    -webkit-app-region: drag;
 }
 #vertical,
 #horizontal {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  flex-direction: row;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    flex-direction: row;
 }
 #horizontal {
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
 }
 .horizontal-line {
-  display: flex;
-  justify-content: flex-end;
-  flex-grow: 0;
-  width: 100%;
-  height: 1px;
-  background-color: red;
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 0;
+    width: 100%;
+    height: 1px;
+    background-color: red;
 }
 .vertical-line {
-  display: flex;
-  align-items: flex-start;
-  flex-grow: 0;
-  height: 100%;
-  width: 1px;
-  background-color: red;
+    display: flex;
+    align-items: flex-start;
+    flex-grow: 0;
+    height: 100%;
+    width: 1px;
+    background-color: red;
 }
 .horizontal-line span,
 .vertical-line span {
-  font-size: 14px;
-  display: blo3k;
-  position: absolute;
-  z-index: 50;
-  padding: 2px 4px;
-  background-color: red;
-  color: white;
-  text-transform: uppercase;
-  transform-origin: 0 0;
-  transform: translateX(95%) translateY(-50%);
+    font-size: 14px;
+    display: blo3k;
+    position: absolute;
+    z-index: 50;
+    padding: 2px 4px;
+    background-color: red;
+    color: white;
+    text-transform: uppercase;
+    transform-origin: 0 0;
+    transform: translateX(95%) translateY(-50%);
 }
 .vertical-line span {
-  margin-right: 0;
-  transform: rotate(-90deg) translateY(-50%);
+    margin-right: 0;
+    transform: rotate(-90deg) translateY(-50%);
 }
 
 .horizontal-line:first-of-type span {
-  transform: translateX(95%);
+    transform: translateX(95%);
 }
 
 #help {
-  position: absolute;
-  display: flex;
-  z-index: 999;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  color: #0e0e0e;
+    position: absolute;
+    display: flex;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    color: #0e0e0e;
+    user-select: none;
+    -webkit-app-region: drag;
 }
 #help .center {
-  flex-grow: 0;
-  flex-shrink: 1;
-  width: fit-content;
-  height: auto;
-  padding: 8px;
-  background-color: rgba(255, 255, 255, 0.8);
+    flex-grow: 0;
+    flex-shrink: 1;
+    width: fit-content;
+    height: auto;
+    padding: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 #help .group {
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 4px 8px 16px 8px;
-  border-bottom: 1px solid #0e0e0e;
+    width: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 4px 8px 16px 8px;
+    border-bottom: 1px solid #0e0e0e;
 }
 #help .group:last-of-type {
-  border-bottom: none;
-  padding-bottom: 8px;
+    border-bottom: none;
+    padding-bottom: 8px;
 }
 #help h1 {
-  font-size: 24px;
-  font-weight: bold;
+    font-size: 24px;
+    font-weight: bold;
 }
 #help p {
-  width: 100%;
-  font-size: 18px;
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    width: 100%;
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 #help b {
-  font-weight: bold;
+    font-weight: bold;
 }
 #help span {
-  padding-left: 16px;
+    padding-left: 16px;
 }
