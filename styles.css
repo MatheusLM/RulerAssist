@@ -1,26 +1,26 @@
 ::-webkit-scrollbar {
   display: none;
 }
-*{
+* {
   padding: 0;
   margin: 0;
   background-color: transparent;
   font-size: 14px;
   box-sizing: border-box;
   transition-duration: 0s;
-  font-family: 'calibri';
+  font-family: "calibri";
 }
-#html{
+#html {
   transform-origin: 50% 50%;
   transition-duration: transform 0.2s;
 }
-body{
+body {
   width: 100vw;
   height: 100vh;
   display: flex;
 }
 
-#ruler{
+#ruler {
   height: 56px;
   display: flex;
   flex-grow: 1;
@@ -28,12 +28,12 @@ body{
   background-image: url("./assets/pattern.png");
   background-size: 10px 56px;
   background-repeat: repeat-x;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   user-select: none;
   -webkit-app-region: drag;
 }
 
-#markers{
+#markers {
   display: flex;
   flex-grow: 1;
   flex-shrink: 0;
@@ -41,17 +41,23 @@ body{
   justify-content: space-between;
   margin-left: -1px;
 }
-#markerLimit{
+#markerLimit {
   position: absolute;
   top: calc(100vh - 1px);
   width: 100vw;
   height: 1px;
   background-color: #0e0e0e;
 }
-.marker:first-of-type{ transform: translateX(1px); }
-.marker:first-of-type span{ transform: rotate(-90deg) translateX(-45%) translateY(50%); }
-.marker:last-of-type span{ transform: rotate(-90deg) translateX(-45%) translateY(-50%); }
-.marker{
+.marker:first-of-type {
+  transform: translateX(1px);
+}
+.marker:first-of-type span {
+  transform: rotate(-90deg) translateX(-45%) translateY(50%);
+}
+.marker:last-of-type span {
+  transform: rotate(-90deg) translateX(-45%) translateY(-50%);
+}
+.marker {
   width: 1px;
   height: 100vh;
   background-color: #0e0e0e;
@@ -59,7 +65,7 @@ body{
   align-items: flex-start;
   justify-content: center;
 }
-.marker span{
+.marker span {
   padding: 0 4px 1px 4px;
   font-weight: bold;
   color: white;
@@ -69,7 +75,8 @@ body{
   transform: rotate(-90deg) translateX(-45%) translateY(0%);
 }
 
-#controlsRuler, #controlsGrid{
+#controlsRuler,
+#controlsGrid {
   position: absolute;
   visibility: hidden;
   z-index: 100;
@@ -83,17 +90,17 @@ body{
   -webkit-app-region: none;
 }
 
-.buttonContainer{
+.buttonContainer {
   width: fit-content;
   height: 100%;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   padding: 0 8px;
 }
-.buttonContainer label{
+.buttonContainer label {
   font-size: 12px;
   display: block;
   height: 13px;
@@ -101,7 +108,7 @@ body{
   font-weight: bold;
   text-transform: uppercase;
 }
-.buttonContainer input{
+.buttonContainer input {
   font-size: 12px;
   width: 100%;
   max-width: 80px;
@@ -110,22 +117,23 @@ body{
   background-color: white;
 }
 
-#grid{
+#grid {
   visibility: hidden;
   position: absolute;
   display: flex;
   width: 100vw;
   height: 100vh;
   background-color: transparent;
-  border: 1px solid rgba(0,0,0,0.5);
+  border: 1px solid rgba(0, 0, 0, 0.5);
 }
-#gridContainer{
+#gridContainer {
   position: absolute;
   background-color: transparent;
   user-select: none;
   -webkit-app-region: drag;
 }
-#vertical, #horizontal{
+#vertical,
+#horizontal {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -134,12 +142,12 @@ body{
   align-items: stretch;
   flex-direction: row;
 }
-#horizontal{
+#horizontal {
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
 }
-.horizontal-line{
+.horizontal-line {
   display: flex;
   justify-content: flex-end;
   flex-grow: 0;
@@ -147,7 +155,7 @@ body{
   height: 1px;
   background-color: red;
 }
-.vertical-line{
+.vertical-line {
   display: flex;
   align-items: flex-start;
   flex-grow: 0;
@@ -155,7 +163,8 @@ body{
   width: 1px;
   background-color: red;
 }
-.horizontal-line span, .vertical-line span{
+.horizontal-line span,
+.vertical-line span {
   font-size: 14px;
   display: blo3k;
   position: absolute;
@@ -165,18 +174,18 @@ body{
   color: white;
   text-transform: uppercase;
   transform-origin: 0 0;
-  transform: translateX(95%) translateY(-50%)
+  transform: translateX(95%) translateY(-50%);
 }
-.vertical-line span{
+.vertical-line span {
   margin-right: 0;
   transform: rotate(-90deg) translateY(-50%);
 }
 
-.horizontal-line:first-of-type span{
-  transform: translateX(95%)
+.horizontal-line:first-of-type span {
+  transform: translateX(95%);
 }
 
-#help{
+#help {
   position: absolute;
   display: flex;
   z-index: 999;
@@ -185,16 +194,18 @@ body{
   width: 100vw;
   height: 100vh;
   color: #0e0e0e;
+  user-select: none;
+  -webkit-app-region: drag;
 }
-#help .center{
+#help .center {
   flex-grow: 0;
   flex-shrink: 1;
   width: fit-content;
   height: auto;
   padding: 8px;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
 }
-#help .group{
+#help .group {
   width: 100%;
   height: auto;
   display: flex;
@@ -202,24 +213,24 @@ body{
   padding: 4px 8px 16px 8px;
   border-bottom: 1px solid #0e0e0e;
 }
-#help .group:last-of-type{
+#help .group:last-of-type {
   border-bottom: none;
   padding-bottom: 8px;
 }
-#help h1{
+#help h1 {
   font-size: 24px;
   font-weight: bold;
 }
-#help p{
+#help p {
   width: 100%;
   font-size: 18px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-#help b{
+#help b {
   font-weight: bold;
 }
-#help span{
+#help span {
   padding-left: 16px;
 }
