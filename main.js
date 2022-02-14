@@ -5,19 +5,19 @@ let data = {
   width: 600,
   height: 56,
   x: 660,
-  y: 512,
+  y: 512
 };
 
 let theme = {
   dark: true,
   rotated: false,
-  opacity: 0.9,
-};
+  opacity: 0.9
+}
 
 let rulerData = {
   equivalent: 1920,
-  equivalentRuler: false,
-};
+  equivalentRuler: false
+}
 
 let controls = {
   fast: false,
@@ -29,11 +29,7 @@ let controls = {
   kiosk: false,
   showControls: false,
   help: true,
-  oldWidth: 600,
-  oldHeight: 56,
-  oldX: 660,
-  oldY: 512,
-};
+}
 
 let gridData = {
   show: false,
@@ -44,60 +40,31 @@ let gridData = {
   columns: 5,
   rows: 5,
   x: 660,
-  y: 240,
-};
+  y: 240
+}
 
-function updateHelp() {
-  if (gridData.show) {
-    updateData();
-    controls.oldWidth = data.width;
-    controls.oldHeight = data.height;
-    controls.oldX = data.x;
-    controls.oldY = data.y;
-    mainWindow.kiosk = true;
-    if (controls.help) {
-      mainWindow.kiosk = false;
-      mainWindow.setSize(332, 618);
-      mainWindow.setPosition(794, 231);
-    } else {
-      mainWindow.setSize(controls.oldWidth, controls.oldHeight);
-      mainWindow.setPosition(controls.oldX, controls.oldY);
-    }
-  } else {
-    mainWindow.kiosk = false;
-    if (controls.help) {
-      controls.oldWidth = data.width;
-      controls.oldHeight = data.height;
-      controls.oldX = data.x;
-      controls.oldY = data.y;
-      mainWindow.setSize(332, 618);
-      mainWindow.setPosition(794, 231);
-    } else {
-      mainWindow.setSize(controls.oldWidth, controls.oldHeight);
-      mainWindow.setPosition(controls.oldX, controls.oldY);
-    }
-    updateData();
-  }
+function updateHelp(){
+  mainWindow.kiosk = controls.help
 }
 function updateData() {
-  let pos = mainWindow.getPosition();
-  let size = mainWindow.getSize();
+  let pos = mainWindow.getPosition()
+  let size = mainWindow.getSize()
   data = {
     width: size[0],
     height: size[1],
     x: pos[0],
-    y: pos[1],
-  };
+    y: pos[1]
+  }
 }
 function updateWindow() {
   mainWindow.setSize(data.width, data.height);
   mainWindow.setPosition(data.x, data.y);
 }
-function updateOpacity() {
-  mainWindow.setOpacity(theme.opacity);
+function updateOpacity(){
+  mainWindow.setOpacity(theme.opacity)
 }
-function updateClickable(newData) {
-  mainWindow.setIgnoreMouseEvents(!newData);
+function updateClickable(newData){
+  mainWindow.setIgnoreMouseEvents(!newData)
 }
 
 const createWindow = () => {
@@ -117,15 +84,15 @@ const createWindow = () => {
   });
 
   /* mainWindow.webContents.openDevTools(true); */
-  updateWindow();
+  updateWindow()
   mainWindow.on("ready-to-show", () => {
-    updateHelp();
-    sendSync(theme, data, controls, rulerData, gridData);
-    sendGrid(gridData);
-    sendRuler(rulerData);
-    sendControls(controls, data);
+    sendSync(theme, data, controls, rulerData, gridData)
+    sendGrid(gridData)
+    sendRuler(rulerData)
+    sendControls(controls, data)
+    updateHelp()
     console.log("Started app");
-  });
+  })
   mainWindow.loadFile("./index.html");
 };
 
@@ -133,27 +100,23 @@ app.whenReady().then(() => {
   createWindow();
 
   ipcMain.on("resyncRuler", (event, newRulerData) => {
-    rulerData.equivalent = newRulerData.equivalent;
-    sendControls(controls, data);
-  });
+    rulerData.equivalent = newRulerData.equivalent
+    sendControls(controls, data)
+  })
 
   ipcMain.on("resyncGrid", (event, newGridData) => {
-    gridData = newGridData;
-  });
+    gridData = newGridData
+  })
 
-  mainWindow.on("resize", () => {
-    if (!controls.help) {
-      updateData();
-    }
-    sendRuler(rulerData);
-    sendControls(controls, data);
+  mainWindow.on('resize', () => {
+    updateData()
+    sendRuler(rulerData)
+    sendControls(controls, data)
   });
   mainWindow.on("will-move", () => {
-    if (!controls.help && !gridData.show) {
-      updateData();
-      updateWindow();
-    }
-  });
+    updateData()
+    updateWindow()
+  })
   /* mainWindow.on("focus", () => {
     sendSync(theme, data, controls, rulerData, gridData)
   })
@@ -161,273 +124,259 @@ app.whenReady().then(() => {
     sendSync(theme, data, controls, rulerData, gridData)
   }) */
 
-  updateData();
+  updateData()
   setupKeys(globalShortcut);
 });
 
 // Sender functions
-function sendSync(theme, data, controls, rulerData, gridData) {
-  mainWindow.webContents.send(
-    "sync",
-    theme,
-    data,
-    controls,
-    rulerData,
-    gridData
-  );
+function sendSync(theme, data, controls, rulerData, gridData){
+  mainWindow.webContents.send("sync", theme, data, controls, rulerData, gridData);
 }
-function sendControls(controls, data) {
+function sendControls(controls, data){
   mainWindow.webContents.send("sendControls", controls, data);
 }
-function sendTheme(newTheme) {
+function sendTheme(newTheme){
   mainWindow.webContents.send("sendTheme", newTheme);
 }
-function sendGrid(newGridData) {
+function sendGrid(newGridData){
   mainWindow.webContents.send("syncGrid", newGridData);
 }
-function sendRuler(newRulerData) {
+function sendRuler(newRulerData){
   mainWindow.webContents.send("syncRuler", newRulerData);
 }
 
-function setupKeys(globalShortcut) {
+function setupKeys(globalShortcut){
   // Toggle Help Screen
   globalShortcut.register("Alt+H", () => {
     controls.help = !controls.help;
-    updateHelp();
-    sendControls(controls, data);
-  });
-  // Kiosk controls
-  globalShortcut.register("Alt+F", () => {
-    controls.kiosk = !controls.kiosk;
-    mainWindow.kiosk = controls.kiosk;
-    sendControls(controls, data);
+    mainWindow.kiosk = controls.help
+    sendControls(controls, data)
   });
   // Fast mode
   globalShortcut.register("Scrolllock", () => {
     controls.fast = !controls.fast;
-    controls.modifier = controls.fast ? 10 : 1;
+    controls.modifier = (controls.fast)? 10 : 1;
   });
   // Show controls
   globalShortcut.register("Alt+C", () => {
-    updateData();
+    updateData()
     controls.showControls = !controls.showControls;
-    if (controls.showControls) {
+    if (controls.showControls){
       updateClickable(true);
-      data.height += data.height <= 56 ? 40 : 0;
-    } else {
+      data.height += (data.height <= 56) ? 40 : 0;
+    }else{
       updateClickable(controls.clickable);
-      data.height -= data.height > 96 ? 0 : 40;
+      data.height -= (data.height > 96) ? 0 : 40;
     }
-    sendControls(controls, data);
-    updateWindow();
+    sendControls(controls, data)
+    updateWindow()
   });
   // Window position
   globalShortcut.register("Alt+up", () => {
     updateData();
     data.y -= controls.modifier;
-    updateWindow();
+    updateWindow()
   });
   globalShortcut.register("Alt+down", () => {
     updateData();
     data.y += controls.modifier;
-    updateWindow();
+    updateWindow()
   });
   globalShortcut.register("Alt+left", () => {
     updateData();
     data.x -= controls.modifier;
-    updateWindow();
+    updateWindow()
   });
   globalShortcut.register("Alt+right", () => {
     updateData();
     data.x += controls.modifier;
-    updateWindow();
+    updateWindow()
   });
 
   // Theme toggle
   globalShortcut.register("Alt+T", () => {
-    updateData();
+    updateData()
     theme.dark = !theme.dark;
-    sendTheme(theme);
-    updateWindow();
+    sendTheme(theme)
+    updateWindow()
   });
   // Window rotate
   globalShortcut.register("Alt+R", () => {
-    updateData();
+    updateData()
     theme.rotated = !theme.rotated;
     /* let size = mainWindow.getSize()
     data.width = size[1];
     data.height = size[0]; */
-    sendTheme(theme);
-    updateWindow();
+    sendTheme(theme)
+    updateWindow()
   });
   // Window opacity
   globalShortcut.register("Alt+PageUp", () => {
-    theme.opacity += theme.opacity < 1 ? 0.05 : 0;
-    updateOpacity();
+    theme.opacity += (theme.opacity < 1) ? 0.05 : 0;
+    updateOpacity()
   });
   globalShortcut.register("Alt+PageDown", () => {
-    theme.opacity -= theme.opacity > 0.1 ? 0.05 : 0;
-    updateOpacity();
+    theme.opacity -= (theme.opacity > 0.1) ? 0.05 : 0;
+    updateOpacity()
   });
 
   // Size controls
   globalShortcut.register("Alt+numadd", () => {
-    updateData();
+    updateData()
     data.width += controls.modifier;
-    updateWindow();
-    sendControls(controls, data);
+    updateWindow()
+    sendControls(controls, data)
   });
   globalShortcut.register("Alt+numsub", () => {
-    updateData();
+    updateData()
     data.width -= controls.modifier;
-    updateWindow();
-    sendControls(controls, data);
+    updateWindow()
+    sendControls(controls, data)
   });
 
   // Clickable control
   globalShortcut.register("Alt+num0", () => {
-    updateData();
-    controls.clickable = !controls.clickable;
-    updateClickable(controls.clickable);
+    updateData()
+    controls.clickable = !controls.clickable
+    updateClickable(controls.clickable)
   });
 
+  // Kiosk controls
+  globalShortcut.register("Alt+F", () => {
+    controls.kiosk = !controls.kiosk
+    mainWindow.kiosk = controls.kiosk
+    sendControls(controls, data)
+  });
   // Equivalent ruler
   globalShortcut.register("Alt+E", () => {
-    updateData();
-    rulerData.equivalentRuler = !rulerData.equivalentRuler;
-    sendRuler(rulerData);
-    sendControls(controls, data);
+    updateData()
+    rulerData.equivalentRuler = !rulerData.equivalentRuler
+    sendRuler(rulerData)
+    sendControls(controls, data)
   });
   // Symmetrical ruler
   globalShortcut.register("Alt+S", () => {
-    updateData();
-    controls.symmetrical = !controls.symmetrical;
-    sendControls(controls, data);
+    updateData()
+    controls.symmetrical = !controls.symmetrical
+    sendControls(controls, data)
   });
   // Show steps size
   globalShortcut.register("Alt+Enter", () => {
-    updateData();
-    controls.showSizes = !controls.showSizes;
-    sendControls(controls, data);
-    sendGrid(gridData);
+    updateData()
+    controls.showSizes = !controls.showSizes
+    sendControls(controls, data)
+    sendGrid(gridData)
   });
   // Markers controls
   globalShortcut.register("Alt+Insert", () => {
-    updateData();
-    let step = controls.symmetrical ? 2 : 1;
-    controls.markers += controls.markers < 30 ? step : 0;
-    sendControls(controls, data);
-    updateWindow();
+    updateData()
+    let step = (controls.symmetrical) ? 2 : 1
+    controls.markers += (controls.markers < 30) ? step : 0
+    sendControls(controls, data)
+    updateWindow()
   });
   globalShortcut.register("Alt+Delete", () => {
-    updateData();
-    let step = controls.symmetrical ? 2 : 1;
-    controls.markers -= controls.markers > 2 ? step : 0;
-    sendControls(controls, data);
-    updateWindow();
+    updateData()
+    let step = (controls.symmetrical) ? 2 : 1
+    controls.markers -= (controls.markers > 2) ? step : 0
+    sendControls(controls, data)
+    updateWindow()
   });
 
   // Grid show
   globalShortcut.register("Alt+G", () => {
-    if (!controls.help) {
-      gridData.show = !gridData.show;
-      mainWindow.kiosk = gridData.show;
-      sendControls(controls, data);
-      sendGrid(gridData);
+    if(!controls.help){
+      gridData.show = !gridData.show
+      mainWindow.kiosk = gridData.show
+      sendControls(controls, data)
+      updateData()
+      sendGrid(gridData)
     }
   });
 
   // Grid controls rows and columns
   globalShortcut.register("CmdOrCtrl+Insert", () => {
-    if (gridData.columns < 30) {
-      gridData.columns += 1;
-    }
-    sendGrid(gridData);
+    if (gridData.columns < 30){ gridData.columns += 1 }
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Delete", () => {
-    if (gridData.columns > 1) {
-      gridData.columns -= 1;
-    }
-    sendGrid(gridData);
+    if (gridData.columns > 1){ gridData.columns -= 1 }
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+Insert", () => {
-    if (gridData.rows < 30) {
-      gridData.rows += 1;
-    }
-    sendGrid(gridData);
+    if (gridData.rows < 30){ gridData.rows += 1 }
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+Delete", () => {
-    if (gridData.rows > 1) {
-      gridData.rows -= 1;
-    }
-    sendGrid(gridData);
+    if (gridData.rows > 1){ gridData.rows -= 1 }
+    sendGrid(gridData)
   });
 
   // Grid controls size
   globalShortcut.register("CmdOrCtrl+numadd", () => {
-    if (gridData.width + controls.modifier <= data.width) {
-      gridData.width += controls.modifier;
-    } else {
-      gridData.width = data.width;
+    if (gridData.width + controls.modifier <= data.width){
+      gridData.width += controls.modifier
+    }else{
+      gridData.width = data.width
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+numsub", () => {
-    if (gridData.width - controls.modifier >= 0) {
-      gridData.width -= controls.modifier;
-    } else {
-      gridData.width = 0;
+    if (gridData.width - controls.modifier >= 0){
+      gridData.width -= controls.modifier
+    }else{
+      gridData.width = 0
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+numadd", () => {
-    if (gridData.height + controls.modifier <= data.height) {
-      gridData.height += controls.modifier;
-    } else {
-      gridData.height = data.height;
+    if (gridData.height + controls.modifier <= data.height){
+      gridData.height += controls.modifier
+    }else{
+      gridData.height = data.height
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+Shift+numsub", () => {
-    if (gridData.height - controls.modifier >= 0) {
-      gridData.height -= controls.modifier;
-    } else {
-      gridData.height = 0;
+    if (gridData.height - controls.modifier >= 0){
+      gridData.height -= controls.modifier
+    }else{
+      gridData.height = 0
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
 
   // Grid controls position
   globalShortcut.register("CmdOrCtrl+up", () => {
-    if (gridData.y - controls.modifier > 0) {
-      gridData.y -= controls.modifier;
-    } else {
-      gridData.y = 1;
+    if ((gridData.y - controls.modifier) > 0){
+      gridData.y -= controls.modifier
+    }else{
+      gridData.y = 1
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+down", () => {
-    if (gridData.y + controls.modifier < data.height - gridData.height) {
-      gridData.y += controls.modifier;
-    } else {
-      gridData.y = data.height - gridData.height - 1;
+    if ((gridData.y + controls.modifier) < data.height - gridData.height){
+      gridData.y += controls.modifier
+    }else{
+      gridData.y = data.height - gridData.height - 1
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+left", () => {
-    if (gridData.x - controls.modifier > 0) {
-      gridData.x -= controls.modifier;
-    } else {
-      gridData.x = 1;
+    if ((gridData.x - controls.modifier) > 0){
+      gridData.x -= controls.modifier
+    }else{
+      gridData.x = 1
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
   globalShortcut.register("CmdOrCtrl+right", () => {
-    if (gridData.x + controls.modifier < data.width - gridData.width) {
-      gridData.x += controls.modifier;
-    } else {
-      gridData.x = data.width - gridData.width - 1;
+    if ((gridData.x + controls.modifier) < data.width - gridData.width){
+      gridData.x += controls.modifier
+    }else{
+      gridData.x = data.width - gridData.width - 1
     }
-    sendGrid(gridData);
+    sendGrid(gridData)
   });
 }
