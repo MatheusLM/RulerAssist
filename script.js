@@ -88,6 +88,7 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   // MARKERS
   stepSize = (rulerData.equivalentRuler) ? rulerData.equivalent / controls.markers : data.width / controls.markers;
   
+  // Create markers
   let markersNumber = []
   markers.innerHTML = ''
   if(controls.symmetrical){
@@ -105,6 +106,7 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
       markersNumber.push(i)
     }
   }
+  // Render markers
   for (let i = 0; i < markersNumber.length; i++){
     let step = markersNumber[i]
     let spanText = (controls.showSizes) ? step + ':' + Math.floor(step*stepSize) : step
@@ -122,7 +124,6 @@ ipcRenderer.on("sendControls", (event, newControls, newData) => {
   help.style.visibility = (controls.help) ? "visible" : "hidden"
   grid.style.visibility = (gridData.show && !controls.help) ? "visible" : "hidden"
   ruler.style.visibility = (!gridData.show && !controls.help) ? "visible" : "hidden"
-  
   
 });
 
