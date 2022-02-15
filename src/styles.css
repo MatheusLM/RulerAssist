@@ -4,26 +4,22 @@
 * {
     padding: 0;
     margin: 0;
-    background-color: transparent;
     font-size: 14px;
     box-sizing: border-box;
-    transition-duration: 0s;
+    transition-duration: 0.2s;
     font-family: 'calibri';
 }
 html,
 body {
     width: 100vw;
     height: 100vh;
+    user-select: none;
+    -webkit-app-region: drag;
 }
 
 #container {
-    height: 56px;
     display: flex;
     flex-grow: 1;
-    flex-shrink: 1;
-    background-image: url('./assets/pattern.png');
-    background-size: 10px 56px;
-    background-repeat: repeat-x;
     background-color: rgba(255, 255, 255, 0.8);
     user-select: none;
     -webkit-app-region: drag;
