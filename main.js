@@ -2,23 +2,32 @@ const {app, BrowserWindow, globalShortcut, ipcMain} = require('electron');
 const fs = require('fs');
 var path = require('path');
 var pathToFile = path.join(__dirname, '/src/', 'data.json');
+var data;
 /* fs.writeFileSync('C:/Users/Matheus/Documents/projects/ruler/src/data.json', 'Hey there!'); */
+function getData() {
+    data = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
+}
+function setData() {
+    fs.writeFileSync(pathToFile, JSON.stringify(data));
+}
 
 var mainWindow;
-
 const createWindow = () => {
+    getData();
+    setData();
     newScreen = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
             contextIsolation: false
         },
-        width: 600,
-        height: 56,
-        minWidth: 300,
-        minHeight: 56,
-        maxWidth: 1920,
-        maxHeight: 1080,
+        width: data.window.width,
+        minWidth: data.window.minWidth,
+        maxWidth: data.window.maxWidth,
+        height: data.window.height,
+        minHeight: data.window.minHeight,
+        maxHeight: data.window.maxHeight,
+        opacity: data.window.opacity,
         frame: false,
         transparent: true
         /* alwaysOnTop: true */

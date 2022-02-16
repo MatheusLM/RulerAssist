@@ -1,1 +1,27 @@
-Hey there!
+{
+    "window": {
+        "width": 600,
+        "minWidth": 300,
+        "maxWidth": 1920,
+        "height": 48,
+        "minHeight": 64,
+        "maxHeight": 1080,
+        "x": -720,
+        "y": 100,
+        "opacity": 1
+    },
+    "grid": {
+        "width": 600,
+        "widthEquivalent": 600,
+        "height": 48,
+        "heightEquivalent": 48,
+        "x": 0,
+        "y": 0,
+        "rows": 3,
+        "columns": 3,
+        "equivalent": false,
+        "symmetry": false,
+        "dark": false,
+        "rotate": false
+    }
+}

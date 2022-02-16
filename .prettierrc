@@ -4,7 +4,8 @@
     "endOfLine": "lf",
     "singleQuote": true,
     "printWidth": 160,
-    "bracketSpacing": false,
-    "trailingComma": "none",
-    "arrowParens": "avoid"
+    "bracketSpacing": true,
+    "trailingComma": "all",
+    "arrowParens": "avoid",
+    "lineSpacing": "avoid"
 }

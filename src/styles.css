@@ -8,6 +8,7 @@
     box-sizing: border-box;
     transition-duration: 0.2s;
     font-family: 'calibri';
+    outline: none;
 }
 html,
 body {
@@ -15,6 +16,7 @@ body {
     height: 100vh;
     user-select: none;
     -webkit-app-region: drag;
+    background-color: red;
 }
 
 #container {
@@ -27,23 +29,87 @@ body {
 
 #controls {
     width: 100vw;
-    height: 56px;
+    height: 48px;
     padding: 4px;
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+}
+
+input {
     -webkit-app-region: none;
+}
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .group {
-    max-width: 100px;
-    padding: 4px;
+    display: grid;
+    max-width: 70px;
+    margin: 0 4px;
+    grid-column-gap: 2px;
+    grid-template-columns: 100%;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+        'label'
+        'input';
 }
 .group label {
     display: block;
+    grid-area: label;
     width: 100%;
     text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+.group input {
+    grid-area: input;
+    padding: 2px 4px;
+    border: 1px solid black;
+    background-color: transparent;
 }
 
-.group input {
-    width: 100%;
+.double {
+    max-width: 110px;
+    grid-template-columns: 50% 50%;
+    grid-template-areas:
+        'label label'
+        'first last';
+}
+.double input:first-of-type {
+    grid-area: first;
+}
+.double input:last-of-type {
+    grid-area: last;
+}
+
+.select {
+    max-width: 130px;
+    grid-gap: 2px;
+    padding: 2px;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+        'first firstL'
+        'last lastL';
+}
+.select input {
+    transform: scale(1.2) translateY(1px);
+}
+.select label {
+    text-align: left;
+    margin-left: 2px;
+    -webkit-app-region: none;
+}
+.select label:first-of-type {
+    grid-area: firstL;
+}
+.select label:last-of-type {
+    grid-area: lastL;
+}
+.select input:first-of-type {
+    grid-area: first;
+}
+.select input:last-of-type {
+    grid-area: last;
 }
