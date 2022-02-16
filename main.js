@@ -1,42 +1,40 @@
 const {app, BrowserWindow, globalShortcut, ipcMain} = require('electron');
+const fs = require('fs');
+var path = require('path');
+var pathToFile = path.join(__dirname, '/src/', 'data.json');
+/* fs.writeFileSync('C:/Users/Matheus/Documents/projects/ruler/src/data.json', 'Hey there!'); */
 
 var mainWindow;
-let data = {
-    width: 650,
-    height: 200,
-    x: -720,
-    y: 100
-};
 
 const createWindow = () => {
-    mainWindow = new BrowserWindow({
+    newScreen = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
+            nodeIntegrationInWorker: true,
             contextIsolation: false
         },
-        width: data.width,
-        height: data.height,
-        minWidth: 56,
+        width: 600,
+        height: 56,
+        minWidth: 300,
         minHeight: 56,
         maxWidth: 1920,
-        maxHeight: 1080
+        maxHeight: 1080,
+        frame: false,
+        transparent: true
         /* alwaysOnTop: true */
-        /* frame: false */
-        /* transparent: true */
     });
 
-    mainWindow.setPosition(data.x, data.y);
-    /* mainWindow.webContents.openDevTools(true); */
-    mainWindow.on('ready-to-show', () => {
-        // Initial configuration
+    newScreen.setPosition(-720, 100);
+    newScreen.loadFile('./src/index.html');
+    /* newScreen.webContents.openDevTools(true); */
+    newScreen.on('ready-to-show', () => {
+        newScreen.webContents.send('initial', String(pathToFile));
     });
-    mainWindow.loadFile('./src/index.html');
 };
 
 app.whenReady().then(() => {
-    createWindow();
-
-    ipcMain.on('event_received', (event, newRulerData) => {});
+    mainWindow = createWindow();
+    ipcMain.on('resync', (event, newRulerData) => {});
 
     mainWindow.on('resize', () => {});
     mainWindow.on('will-move', () => {});

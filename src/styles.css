@@ -24,3 +24,26 @@ body {
     user-select: none;
     -webkit-app-region: drag;
 }
+
+#controls {
+    width: 100vw;
+    height: 56px;
+    padding: 4px;
+    display: flex;
+    flex-direction: row;
+    -webkit-app-region: none;
+}
+
+.group {
+    max-width: 100px;
+    padding: 4px;
+}
+.group label {
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.group input {
+    width: 100%;
+}

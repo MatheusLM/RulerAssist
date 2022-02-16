@@ -12,6 +12,12 @@
         "dev": "nodemon --watch * --exec electron ."
     },
     "dependencies": {
+        "electron-storage": "^1.0.7",
         "nodemon": "^2.0.15"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "/src/*.json"
+        ]
     }
 }
