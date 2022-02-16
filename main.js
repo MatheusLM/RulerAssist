@@ -1,4 +1,4 @@
-const {app, BrowserWindow, globalShortcut, ipcMain} = require('electron');
+const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const fs = require('fs');
 var path = require('path');
 var pathToFile = path.join(__dirname, '/src/', 'data.json');
@@ -19,7 +19,7 @@ const createWindow = () => {
         webPreferences: {
             nodeIntegration: true,
             nodeIntegrationInWorker: true,
-            contextIsolation: false
+            contextIsolation: false,
         },
         width: data.window.width,
         minWidth: data.window.minWidth,
@@ -29,13 +29,13 @@ const createWindow = () => {
         maxHeight: data.window.maxHeight,
         opacity: data.window.opacity,
         frame: false,
-        transparent: true
-        /* alwaysOnTop: true */
+        transparent: true,
+        alwaysOnTop: data.window.alwaysOnTop,
     });
 
-    newScreen.setPosition(-720, 100);
+    newScreen.setPosition(data.window.x, data.window.y);
     newScreen.loadFile('./src/index.html');
-    /* newScreen.webContents.openDevTools(true); */
+    newScreen.webContents.openDevTools(true);
     newScreen.on('ready-to-show', () => {
         newScreen.webContents.send('initial', String(pathToFile));
     });

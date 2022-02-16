@@ -1,23 +1,28 @@
-const {ipcRenderer, ipcMain} = require('electron');
-import('./markers.js');
-import('./shortcuts.js');
+const { ipcRenderer, ipcMain } = require('electron');
 const fs = require('fs');
+
+let elements = import('./elements.js');
+import('./listeners.js');
+import('./shortcuts.js');
+import('./markers.js');
 
 let pathToFile;
 let data = {};
 
-function getData(path) {
-    data = fs.readFileSync(path, 'utf8');
+function getData() {
+    data = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
+}
+function setData() {
+    fs.writeFileSync(pathToFile, JSON.stringify(data));
 }
 
 ipcRenderer.on('initial', (event, initialData) => {
     pathToFile = initialData;
-    getData(initialData);
-    console.log('scripts', data);
+    getData();
 });
 
 ipcRenderer.on('sync', (event, data) => {
-    getData(initialData);
+    getData();
 });
 
 /* ipcRenderer.send('resync', newData); */

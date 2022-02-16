@@ -1,6 +1,5 @@
-const {ipcRenderer, ipcMain} = require('electron');
+const { ipcRenderer, ipcMain } = require('electron');
 const fs = require('fs');
+console.log('[Loaded] Shortcuts');
 
-ipcRenderer.on('initial', (event, initialData) => {
-    console.log('Shortcuts Loaded');
-});
+ipcRenderer.on('initial', (event, initialData) => {});
