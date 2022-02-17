@@ -14,7 +14,6 @@ function setData() {
 var mainWindow;
 const createWindow = () => {
     getData();
-    setData();
     newScreen = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
@@ -28,9 +27,9 @@ const createWindow = () => {
         minHeight: data.window.minHeight,
         maxHeight: data.window.maxHeight,
         opacity: data.window.opacity,
+        alwaysOnTop: data.window.alwaysOnTop,
         frame: false,
         transparent: true,
-        alwaysOnTop: data.window.alwaysOnTop,
     });
 
     newScreen.setPosition(data.window.x, data.window.y);
@@ -38,23 +37,35 @@ const createWindow = () => {
     newScreen.webContents.openDevTools(true);
     newScreen.on('ready-to-show', () => {
         newScreen.webContents.send('initial', String(pathToFile));
+        /* setupKeys(); */
     });
+    mainWindow = newScreen;
 };
 
 app.whenReady().then(() => {
-    mainWindow = createWindow();
-    ipcMain.on('resync', (event, newRulerData) => {});
+    var mainWindow = createWindow();
+    ipcMain.on('resync', (event, newData) => {
+        getData();
+        console.log(data);
+    });
 
-    mainWindow.on('resize', () => {});
-    mainWindow.on('will-move', () => {});
-    mainWindow.on('focus', () => {});
-    mainWindow.on('blur', () => {});
-
-    updateData();
-    setupKeys(globalShortcut);
+    newScreen.on('resized', () => {
+        let size = newScreen.getSize();
+        data.window.width = size[0];
+        data.window.height = size[1];
+        setData();
+    });
+    newScreen.on('moved', () => {
+        let position = newScreen.getPosition();
+        data.window.x = position[0];
+        data.window.y = position[1];
+        setData();
+    });
+    newScreen.on('focus', () => {});
+    newScreen.on('blur', () => {});
 });
 
-function setupKeys(globalShortcut) {
+function setupKeys() {
     // Create a shortcut
     globalShortcut.register('Alt+Q', () => {
         console.log('Shortcut: Alt+Q');
