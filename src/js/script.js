@@ -1,10 +1,9 @@
 const { ipcRenderer, ipcMain } = require('electron');
 const fs = require('fs');
 
-import('./shortcuts.js');
-import('./markers.js');
 import('./elements.js');
 import('./listeners.js');
+import('./markers.js');
 
 let pathToFile;
 let data = {};
@@ -14,9 +13,6 @@ function getData() {
 }
 function setData() {
     fs.writeFileSync(pathToFile, JSON.stringify(data));
-}
-function getElements() {
-    console.log(elements);
 }
 
 ipcRenderer.on('initial', (event, initialData) => {

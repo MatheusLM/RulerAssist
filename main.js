@@ -1,14 +1,19 @@
 const { app, BrowserWindow, globalShortcut, ipcMain } = require('electron');
 const fs = require('fs');
+const setupKeys = require('./src/js/shortcuts');
 var path = require('path');
 var pathToFile = path.join(__dirname, '/src/', 'data.json');
 var data;
-/* fs.writeFileSync('C:/Users/Matheus/Documents/projects/ruler/src/data.json', 'Hey there!'); */
+
+function emitInitial() {
+    newScreen.webContents.send('initial', String(pathToFile));
+}
 function getData() {
     data = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
 }
 function setData() {
     fs.writeFileSync(pathToFile, JSON.stringify(data));
+    emitInitial();
 }
 
 var mainWindow;
@@ -36,8 +41,8 @@ const createWindow = () => {
     newScreen.loadFile('./src/index.html');
     newScreen.webContents.openDevTools(true);
     newScreen.on('ready-to-show', () => {
-        newScreen.webContents.send('initial', String(pathToFile));
-        /* setupKeys(); */
+        emitInitial();
+        setupKeys();
     });
     mainWindow = newScreen;
 };
@@ -53,6 +58,8 @@ app.whenReady().then(() => {
         let size = newScreen.getSize();
         data.window.width = size[0];
         data.window.height = size[1];
+        data.grid.width = size[0];
+        data.grid.height = size[1];
         setData();
     });
     newScreen.on('moved', () => {
@@ -64,10 +71,3 @@ app.whenReady().then(() => {
     newScreen.on('focus', () => {});
     newScreen.on('blur', () => {});
 });
-
-function setupKeys() {
-    // Create a shortcut
-    globalShortcut.register('Alt+Q', () => {
-        console.log('Shortcut: Alt+Q');
-    });
-}
