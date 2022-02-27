@@ -10,6 +10,7 @@ let data = {};
 
 function getData() {
     data = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
+    return data;
 }
 function setData() {
     fs.writeFileSync(pathToFile, JSON.stringify(data));
@@ -18,6 +19,7 @@ function setData() {
 ipcRenderer.on('initial', (event, initialData) => {
     pathToFile = initialData;
     getData();
+    event.sender.emit('updateValues');
 });
 
 ipcRenderer.on('sync', (event, data) => {

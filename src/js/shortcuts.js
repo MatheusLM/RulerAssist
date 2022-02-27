@@ -1,17 +1,51 @@
-const { globalShortcut } = require('electron');
+const { globalShortcut, ipcMain, ipcRenderer } = require('electron');
+const fs = require('fs');
 
 var shortcuts = true;
+var path = require('path');
+var pathToFile = path.join(__dirname, '../data.json');
+var data;
+
+function getData() {
+    data = JSON.parse(fs.readFileSync(pathToFile, 'utf8'));
+}
+function setData() {
+    fs.writeFileSync(pathToFile, JSON.stringify(data));
+}
 
 function setupKeys() {
-    globalShortcut.register('Alt+R', () => {
+    getData();
+    globalShortcut.register('Alt+S', () => {
         shortcuts = !shortcuts;
-        console.log('[Shortcut]', shortcuts);
+        console.log('[Shortcut] enabled:', shortcuts);
     });
+
+    globalShortcut.register('Alt+C', () => {
+        if (!shortcuts) return;
+        data.window.controls = !data.window.controls;
+        setData();
+        ipcMain.emit('syncControls');
+    });
+
+    globalShortcut.register('Alt+D', () => {
+        if (!shortcuts) return;
+        data.grid.dark = !data.grid.dark;
+        setData();
+        ipcMain.emit('updateDarkMode');
+    });
+
+    globalShortcut.register('Alt+T', () => {
+        if (!shortcuts) return;
+        data.window.alwaysOnTop = !data.window.alwaysOnTop;
+        setData();
+        ipcMain.emit('updateAlwaysOnTop');
+    });
+
     globalShortcut.register('Alt+Q', () => {
         if (!shortcuts) return;
-        console.log('[Shortcut] Alt+Q');
+        ipcMain.emit('closeRuler');
     });
 }
 
-console.log('[Loaded] Shortcuts');
+console.log('[Loaded] shortcuts');
 module.exports = setupKeys;
