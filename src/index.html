@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
+        <title>RullerAssist</title>
+        <link rel="stylesheet" href="./styles.css" />
+    </head>
+    <body id="body">
+        <div id="container">
+            <div id="controls">
+                <div class="group double">
+                    <label>width</label>
+                    <input type="number" id="width" min="1" />
+                    <input type="number" id="widthEquivalent" min="1" />
+                </div>
+                <div class="group double">
+                    <label>height</label>
+                    <input type="number" id="height" min="1" />
+                    <input type="number" id="heightEquivalent" min="1" />
+                </div>
+                <div class="group double">
+                    <label>markers R/C</label>
+                    <input type="number" id="rows" min="1" />
+                    <input type="number" id="columns" min="1" />
+                </div>
+                <div class="group select">
+                    <label for="equivalent">equivalent</label>
+                    <input type="checkbox" id="equivalent" />
+                    <label for="symmetrical">symmetrical</label>
+                    <input type="checkbox" id="symmetrical" />
+                </div>
+                <div class="group select">
+                    <label for="dark">dark</label>
+                    <input type="checkbox" id="dark" />
+                    <label for="rotate">rotate</label>
+                    <input type="checkbox" id="rotate" />
+                </div>
+            </div>
+            <div id="grid">
+                <div id="horizontal"></div>
+                <div id="vertical"></div>
+            </div>
+        </div>
+        <script src="./js/script.js"></script>
+    </body>
+</html>

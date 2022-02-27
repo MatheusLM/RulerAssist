@@ -1,14 +1,23 @@
 {
-  "name": "ruler",
-  "version": "1.0.0",
-  "main": "main.js",
-  "author": "Matheus Lopes Marques",
-  "license": "MIT",
-  "devDependencies": {
-    "electron": "^17.0.0"
-  },
-  "scripts": {
-    "start": "electron .",
-    "dev": "nodemon --watch * --exec electron ."
-  }
+    "name": "ruler",
+    "version": "1.0.0",
+    "main": "main.js",
+    "author": "Matheus Lopes Marques",
+    "license": "MIT",
+    "devDependencies": {
+        "electron": "^17.0.0"
+    },
+    "scripts": {
+        "start": "electron .",
+        "dev": "nodemon --watch * --exec electron ."
+    },
+    "dependencies": {
+        "electron-storage": "^1.0.7",
+        "nodemon": "^2.0.15"
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "/src/*.json"
+        ]
+    }
 }
