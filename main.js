@@ -52,10 +52,11 @@ const createWindow = () => {
 
     newScreen.setPosition(data.window.x, data.window.y);
     newScreen.loadFile('./src/index.html');
-    newScreen.webContents.openDevTools(true);
+    /* newScreen.webContents.openDevTools(true); */
     newScreen.on('ready-to-show', () => {
         emitInitial();
         setupKeys(data);
+        newScreen.setIgnoreMouseEvents(!data.window.controls);
     });
     mainWindow = newScreen;
 };
@@ -103,6 +104,7 @@ app.whenReady().then(() => {
         setData();
         emitUpdateMarkers();
     });
+
     newScreen.on('moved', () => {
         getData();
         let position = newScreen.getPosition();
@@ -110,6 +112,7 @@ app.whenReady().then(() => {
         data.window.y = position[1];
         setData();
     });
+
     newScreen.on('focus', () => {});
     newScreen.on('blur', () => {});
 });
